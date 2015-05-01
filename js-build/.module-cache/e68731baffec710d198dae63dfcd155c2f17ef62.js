@@ -14,9 +14,8 @@ var ajaxServerRequest = function(){
 				dataType: 'json',
 				success: function(cityData)
 				{
-					cityData.length = 10;
 					console.log('data received', cityData);
-					return cityData;
+					return cityData.slice(0,10);
 				}
 			});
 }
@@ -52,85 +51,85 @@ var Filter = ['Search','Cost','Internet Speed','Temperature','Humidity','Air Qua
 
 var Links = ["Cities", "Forum", "Chat", "Guides", "Remote Jobs", "Meetups", "Stories", "Signup"];
 
-var NavBar = React.createClass({
+var NavBar = React.createClass({displayName: "NavBar",
 	render: function(){
 		var NavBar = Links.map(function(link){
-			return (<li>{link}</li>
+			return (React.createElement("li", null, link)
 				)
 		});
 		return (
-			<div className="NavBar">
-				<h1>Navigation</h1>
-				<ul>
-					{NavBar}
-				</ul>
-			</div>
+			React.createElement("div", {className: "NavBar"}, 
+				React.createElement("h1", null, "Navigation"), 
+				React.createElement("ul", null, 
+					NavBar
+				)
+			)
 			) 
 	}
 });
 
-var FilterMenu = React.createClass({
+var FilterMenu = React.createClass({displayName: "FilterMenu",
 	render: function(){
 		return (
-			<div className="FilterMenu">
-				<FilterViews/>
-				<FilterItems/>
-			</div>
+			React.createElement("div", {className: "FilterMenu"}, 
+				React.createElement(FilterViews, null), 
+				React.createElement(FilterItems, null)
+			)
 			)
 	}
 });
-	var FilterViews = React.createClass({
+	var FilterViews = React.createClass({displayName: "FilterViews",
 		render: function(){
 			return (
-				<div className="FilterViews">
-					<h3>Filter Views</h3>
-					<ul>
-						<li>Grid View</li>
-						<li>List View</li>
-						<li>Map View</li>
-						<li>Settings View</li>
-					</ul>
-				</div>
+				React.createElement("div", {className: "FilterViews"}, 
+					React.createElement("h3", null, "Filter Views"), 
+					React.createElement("ul", null, 
+						React.createElement("li", null, "Grid View"), 
+						React.createElement("li", null, "List View"), 
+						React.createElement("li", null, "Map View"), 
+						React.createElement("li", null, "Settings View")
+					)
+				)
 				)
 		}
 	})
 		
-	var FilterItems = React.createClass({
+	var FilterItems = React.createClass({displayName: "FilterItems",
 		render: function(){
 			var FilterItems = Filter.map(function(filter){
-			return (<li>{filter}</li>
+			return (React.createElement("li", null, filter)
 				)
 			});
 			return (
-				<div className="FilterItems">
-					<h3>Filter Items</h3>
-						<ul>
-							{FilterItems}
-						</ul>
+				React.createElement("div", {className: "FilterItems"}, 
+					React.createElement("h3", null, "Filter Items"), 
+						React.createElement("ul", null, 
+							FilterItems
+						)
 
-				</div>
+				)
 				)
 		}
 	})
 
-var SelectedView = React.createClass({
+var SelectedView = React.createClass({displayName: "SelectedView",
 	render: function(){
 		return (
-			<div className="SelectedView">
-				<FilteredResults/>
-			</div>
+			React.createElement("div", {className: "SelectedView"}, 
+				React.createElement(FilteredResults, null)
+			)
 			)
 	}
 })
-	var FilteredResults = React.createClass({
+	var FilteredResults = React.createClass({displayName: "FilteredResults",
 		render: function(){
 			var FilteredResults = CityData.map(function(city){
-				return (<li>{city.Name} | ${city.Cost}</li>)
+				return (React.createElement("li", null, city.Name, " | $", city.Cost))
 			});
 			return (
-				<div className="FilteredResult">
-					{FilteredResults}
-				</div>
+				React.createElement("div", {className: "FilteredResult"}, 
+					FilteredResults
+				)
 				)
 		}
 	}); 
@@ -139,20 +138,20 @@ var SelectedView = React.createClass({
 		var DataCorners;
 		var DisplayImage;
 
-var App = React.createClass({
+var App = React.createClass({displayName: "App",
 	render: function(){
 		ajaxServerRequest().then(fulfilled);
 		function fulfilled(response){
 			console.log('here');
 		};
 		return (
-				<div className="App">
-					<NavBar/>
-					<FilterMenu/>
-					<SelectedView/>
-				</div>
+				React.createElement("div", {className: "App"}, 
+					React.createElement(NavBar, null), 
+					React.createElement(FilterMenu, null), 
+					React.createElement(SelectedView, null)
+				)
 			)
 	}
 });
 
-React.render(<App/>,document.getElementById('content'));
+React.render(React.createElement(App, null),document.getElementById('content'));

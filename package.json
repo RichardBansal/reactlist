@@ -12,6 +12,9 @@
     "react": "^0.13.2",
     "cheerio": "^0.19.0",
     "request": "^2.55.0",
-    "bluebird": "^2.9.25"
+    "bluebird": "^2.9.25",
+    "express": "^4.12.3",
+    "path": "^0.11.14",
+    "body-parser": "^1.12.3"
   }
 }

@@ -6,7 +6,7 @@ console.log('App started');
 // 'Region','Safety', 'Other'
 
 var ajaxServerRequest = function(){
-	url = "http://localhost:5000/";
+	url = 'http://localhost:5000/';
 	console.log('request data');
 	return $.ajax(
 			{
@@ -14,11 +14,11 @@ var ajaxServerRequest = function(){
 				dataType: 'json',
 				success: function(cityData)
 				{
-					cityData.length = 10;
-					console.log('data received', cityData);
+					console.log('data received');
 					return cityData;
 				}
-			});
+			}
+		)
 }
 
 var CityData = [
@@ -141,9 +141,9 @@ var SelectedView = React.createClass({displayName: "SelectedView",
 
 var App = React.createClass({displayName: "App",
 	render: function(){
-		ajaxServerRequest().then(fulfilled);
-		function fulfilled(response){
-			console.log('here');
+		ajaxServerRequest().then(cityData);
+		function cityData(response){
+			console.log(response);
 		};
 		return (
 				React.createElement("div", {className: "App"}, 

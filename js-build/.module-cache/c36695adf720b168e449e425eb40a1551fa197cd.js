@@ -1,24 +1,23 @@
 //https://magic.import.io/
 
-console.log('App started');
+console.log('hello world');
+
 
 // 'Search','Cost','Internet Speed','Temperature','Humidity','Air Quality','Activities',
 // 'Region','Safety', 'Other'
 
-var ajaxServerRequest = function(){
-	url = "http://localhost:5000/";
-	console.log('request data');
+var ajaxServerRequest = function(url){
 	return $.ajax(
 			{
-				url:url,
+				url:url||'http://localhost:1337/',
 				dataType: 'json',
 				success: function(cityData)
 				{
-					cityData.length = 10;
-					console.log('data received', cityData);
+					console.log('data received');
 					return cityData;
 				}
-			});
+			}
+		)
 }
 
 var CityData = [
@@ -141,10 +140,6 @@ var SelectedView = React.createClass({displayName: "SelectedView",
 
 var App = React.createClass({displayName: "App",
 	render: function(){
-		ajaxServerRequest().then(fulfilled);
-		function fulfilled(response){
-			console.log('here');
-		};
 		return (
 				React.createElement("div", {className: "App"}, 
 					React.createElement(NavBar, null), 
