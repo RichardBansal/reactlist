@@ -1,0 +1,38 @@
+* {
+	box-sixing: border-box;
+}
+
+.App {
+    border-style: dotted;
+    border-width: 1px;
+}
+
+.NavBar {
+	border-style: dotted;
+	border-width: 1px;
+	/*float: left;*/
+	/*width: 75%;*/
+}
+.FilterMenu {
+	border-style: dotted;
+	border-width: 1px;
+	/*float: right;*/
+	/*width: 25%;*/
+}
+.FilterViews {
+	border-style: dotted;
+	border-width: 1px;
+}
+.FilterItems {
+	border-style: dotted;
+	border-width: 1px;
+}
+.SelectedView {
+	border-style: dotted;
+	border-width: 1px;
+	/*display: block;*/
+}
+.FilteredResults {
+	border-style: dotted;
+	border-width: 1px;
+}
