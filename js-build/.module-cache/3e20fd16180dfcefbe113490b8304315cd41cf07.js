@@ -51,50 +51,23 @@ var FilterableView = React.createClass({displayName: "FilterableView",
 			//TODO: Include more search options from cityData.json
 			//{filter:optionSelected}
 			selectedOptions: []
-            //TODO: Should selectedOptions be an object, for easy replace?
 		}
 	},
 	handleUserInput: function(filterText, selectedOption){
-		console.log('58 - handleUserInput',filterText, selectedOption);
+		console.log('57',filterText);
 
 		//this.state.selectedOptions
 		//	= (selectedOption ?
 		//		this.state.selectedOptions.push(selectedOption):
 		//		this.state.selectedOptions);
-        //TODO: You need to manage options changed for the same filter
-        //TODO: Assume the filters are different? This won't be the case because of cost i.e.
-
-        var updatedSelectedOptions = this.state.selectedOptions;
-        updatedSelectedOptions.push(selectedOption);
-        //if(selectedOptions.length==0){
-        //    selectedOptions.push(selectedOption);
-        //}
-
-        //if(!selectedOption)
-        this.setState({
-            filterText: filterText,
-            selectedOptions: updatedSelectedOptions
-        });
-
-        //if(!selectedOption){
-			//this.setState({
-			//	filterText: filterText,
-			//});
-        //} else if (!filterText){
-			//this.setState({
-			//	selectedOptions: this.state.selectedOptions.push(selectedOption)
-			//});
-        //} else {
-			//this.setState({
-			//	filterText: filterText,
-			//	selectedOptions: this.state.selectedOptions.push(selectedOption)
-			//});
-        //}
+		
+		this.setState({
+			filterText: filterText,
+			selectedOptions: selectedOptions
+		});
 	},
 	render: function(){
-        console.log('95-FilterableView Render',this.state);
 		//<h1>Hello World</h1>
-		console.log('82 - rendering FilterableView',this.state);
 		return (
 			React.createElement("div", null, 
 				React.createElement(FilterMenu, {
@@ -112,8 +85,8 @@ var FilterableView = React.createClass({displayName: "FilterableView",
 });
 
 var FilterMenu = React.createClass({displayName: "FilterMenu",
-	handleUserInput: function(filterText, selectedOption){
-		this.props.onUserInput(filterText, selectedOption);
+	handleUserInput: function(filterText){
+		this.props.onUserInput(filterText);
 	},
 	render: function(){
 		return (
@@ -151,14 +124,14 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 				self.setState({filters:filters});
 			}
 		},
-		getInitialState: function(){ //these are filters being loaded, not selected
+		getInitialState: function(){
 			return {filters:[]};
 		},
 		componentDidMount: function(){
 			this.loadFiltersFromServer();
 		},
 		handleChange: function(){
-			console.log('145 - handleChange', this.refs.filterOptionsInput.getDOMNode().value);
+			console.log('128',this.props);
 			this.props.onUserInput(
 				this.refs.filterTextInput.getDOMNode().value,
 				this.refs.filterOptionsInput.getDOMNode().value
@@ -166,36 +139,23 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 		},
 		render: function(){
 			//console.log('FilterItems.this.props',this.props);
-			//var Cost = [].push(<option>{filter.slice(5,filter.length)}</option>);
 			var Cost = AppartmentCostRange.map(function(cost){
-				return( React.createElement("option", {
-                            value: cost, 
-                            ref: "filterOptionsInput"
-                        }, "   ", cost
-                        ))
+				return(React.createElement("option", {value: cost}, cost))
 			});
-			//{filter.slice(5,filter.length)}
-            //CHECK: onChange correct, onSelect
-			//TODO: The actual filter value is not showing up, correct this
-            //TODO: FIX: Not working correctly, only last option is always being selected
-            var self = this;
+
 			var FilterItems = this.state.filters.map(function(filter){
 				return (
 					React.createElement("div", null, 
 						React.createElement("select", {
-							onChange: self.handleChange}, 
-                            Cost
+							onChange: this.handleChange, 
+							ref: "filterOptionsInput"}, 
+							React.createElement("option", {value: true, selected: true}, " ", filter.slice(5,filter.length)), 
+							Cost
 						)
 					)
 					)
 			});
-			//<div>
-			//	{FilterItems}
-			//</div>
-			//<button onClick={this.handleChange}>Test</button>
-			//<select onChange={this.handleChange} ref="filterOptionsInput">
-			//</select>
-			//TODO: Use a slider to for a more granular change
+
 			return (
 				React.createElement("div", {className: "FilterItems"}, 
 					React.createElement("h3", null, "Filter Items"), 
@@ -210,7 +170,6 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 						React.createElement("div", null, 
 							FilterItems
 						)
-
 
 				)
 				)

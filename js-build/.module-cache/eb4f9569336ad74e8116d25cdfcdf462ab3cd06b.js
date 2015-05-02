@@ -26,24 +26,24 @@ var Links = ["Cities", "Forum", "Chat", "Guides", "Remote Jobs", "Meetups", "Sto
 
 var AppartmentCostRange = [125,250,500,1000,2000];
 
-var NavBar = React.createClass({
+var NavBar = React.createClass({displayName: "NavBar",
 	render: function(){
 		var NavBar = Links.map(function(link){
-			return (<li>{link}</li>
+			return (React.createElement("li", null, link)
 				)
 		});
 		return (
-			<div className="NavBar">
-				<h1>Navigation</h1>
-				<ul>
-					{NavBar}
-				</ul>
-			</div>
+			React.createElement("div", {className: "NavBar"}, 
+				React.createElement("h1", null, "Navigation"), 
+				React.createElement("ul", null, 
+					NavBar
+				)
+			)
 			) 
 	}
 });
 
-var FilterableView = React.createClass({
+var FilterableView = React.createClass({displayName: "FilterableView",
 	getInitialState: function(){
 		return {
 			//straight text debounce search
@@ -51,84 +51,68 @@ var FilterableView = React.createClass({
 			//TODO: Include more search options from cityData.json
 			//{filter:optionSelected}
 			selectedOptions: []
-            //TODO: Should selectedOptions be an object, for easy replace?
 		}
 	},
 	handleUserInput: function(filterText, selectedOption){
-		console.log('58 - handleUserInput',filterText, selectedOption);
+		console.log('57',filterText, selectedOption);
 
 		//this.state.selectedOptions
 		//	= (selectedOption ?
 		//		this.state.selectedOptions.push(selectedOption):
 		//		this.state.selectedOptions);
-        //TODO: You need to manage options changed for the same filter
-        //TODO: Assume the filters are different? This won't be the case because of cost i.e.
 
-        var updatedSelectedOptions = this.state.selectedOptions;
-        updatedSelectedOptions.push(selectedOption);
-        //if(selectedOptions.length==0){
-        //    selectedOptions.push(selectedOption);
-        //}
-
-        //if(!selectedOption)
-        this.setState({
-            filterText: filterText,
-            selectedOptions: updatedSelectedOptions
-        });
-
-        //if(!selectedOption){
-			//this.setState({
-			//	filterText: filterText,
-			//});
-        //} else if (!filterText){
-			//this.setState({
-			//	selectedOptions: this.state.selectedOptions.push(selectedOption)
-			//});
-        //} else {
-			//this.setState({
-			//	filterText: filterText,
-			//	selectedOptions: this.state.selectedOptions.push(selectedOption)
-			//});
-        //}
+		if(!selectedOption){
+			this.setState({
+				filterText: filterText,
+			});
+		} else if (!filterText){
+			this.setState({
+				selectedOptions: this.state.selectedOptions.push(selectedOption)
+			});
+		} else {
+			this.setState({
+				filterText: filterText,
+				selectedOptions: this.state.selectedOptions.push(selectedOption)
+			});
+		}
 	},
 	render: function(){
-        console.log('95-FilterableView Render',this.state);
 		//<h1>Hello World</h1>
 		console.log('82 - rendering FilterableView',this.state);
 		return (
-			<div>
-				<FilterMenu
-					filterText={this.state.filterText}
-					selectedOptions={this.state.selectedOptions}
-					onUserInput={this.handleUserInput}
-				/>
-				<SelectedView
-					filterText={this.state.filterText}
-					selectedOptions={this.state.selectedOptions}
-				/>
-			</div>
+			React.createElement("div", null, 
+				React.createElement(FilterMenu, {
+					filterText: this.state.filterText, 
+					selectedOptions: this.state.selectedOptions, 
+					onUserInput: this.handleUserInput}
+				), 
+				React.createElement(SelectedView, {
+					filterText: this.state.filterText, 
+					selectedOptions: this.state.selectedOptions}
+				)
+			)
 		)
 	}
 });
 
-var FilterMenu = React.createClass({
-	handleUserInput: function(filterText, selectedOption){
-		this.props.onUserInput(filterText, selectedOption);
+var FilterMenu = React.createClass({displayName: "FilterMenu",
+	handleUserInput: function(filterText){
+		this.props.onUserInput(filterText);
 	},
 	render: function(){
 		return (
-			<div className="FilterMenu">
-				<FilterViews/>
-				<FilterItems
-					filterText={this.props.filterText}
-					selectedOptions={this.props.selectedOptions}
-					onUserInput={this.handleUserInput}
-				/>
-			</div>
+			React.createElement("div", {className: "FilterMenu"}, 
+				React.createElement(FilterViews, null), 
+				React.createElement(FilterItems, {
+					filterText: this.props.filterText, 
+					selectedOptions: this.props.selectedOptions, 
+					onUserInput: this.handleUserInput}
+				)
+			)
 			)
 	}
 });
-	var FilterViews = React.createClass({
+	var FilterViews = React.createClass({displayName: "FilterViews",
 		render: function(){
 			//TODO: Removed below
 			//<h3>Filter Views</h3>
@@ -138,10 +122,10 @@ var FilterMenu = React.createClass({
 			//<li>Map View</li>
 			//<li>Settings View</li>
 			//</ul>
-			return (<div className="FilterViews"></div>)
+			return (React.createElement("div", {className: "FilterViews"}))
 		}
 	});
-	var FilterItems = React.createClass({
+	var FilterItems = React.createClass({displayName: "FilterItems",
 		loadFiltersFromServer: function(){
 			ajaxServerRequest().then(fulfilled);
 			var self = this;
@@ -158,7 +142,7 @@ var FilterMenu = React.createClass({
 			this.loadFiltersFromServer();
 		},
 		handleChange: function(){
-			console.log('145 - handleChange', this.refs.filterOptionsInput.getDOMNode().value);
+			console.log('128',this.props);
 			this.props.onUserInput(
 				this.refs.filterTextInput.getDOMNode().value,
 				this.refs.filterOptionsInput.getDOMNode().value
@@ -166,68 +150,53 @@ var FilterMenu = React.createClass({
 		},
 		render: function(){
 			//console.log('FilterItems.this.props',this.props);
-			//var Cost = [].push(<option>{filter.slice(5,filter.length)}</option>);
 			var Cost = AppartmentCostRange.map(function(cost){
-				return( <option
-                            value={cost}
-                            ref="filterOptionsInput"
-                        >   {cost}
-                        </option>)
+				return(React.createElement("option", {value: cost}, cost))
 			});
-			//{filter.slice(5,filter.length)}
-            //CHECK: onChange correct, onSelect
-			//TODO: The actual filter value is not showing up, correct this
-            //TODO: FIX: Not working correctly, only last option is always being selected
-            var self = this;
+			//<option value selected> {filter.slice(5,filter.length)}</option>
 			var FilterItems = this.state.filters.map(function(filter){
 				return (
-					<div>
-						<select
-							onChange={self.handleChange}>
-                            {Cost}
-						</select>
-					</div>
+					React.createElement("div", null, 
+						React.createElement("select", {
+							onChange: this.handleChange, //CHECK: onChange correct, onSelect
+							ref: "filterOptionsInput"}, 
+							Cost
+						)
+					)
 					)
 			});
-			//<div>
-			//	{FilterItems}
-			//</div>
-			//<button onClick={this.handleChange}>Test</button>
-			//<select onChange={this.handleChange} ref="filterOptionsInput">
-			//</select>
-			//TODO: Use a slider to for a more granular change
+
 			return (
-				<div className="FilterItems">
-					<h3>Filter Items</h3>
-						Quick Search
-						<input
-							type="text"
-							placeholder="search.."
-							value={this.props.filterText}
-							ref="filterTextInput"
-							onChange={this.handleChange}
-						/>
-						<div>
-							{FilterItems}
-						</div>
+				React.createElement("div", {className: "FilterItems"}, 
+					React.createElement("h3", null, "Filter Items"), 
+						"Quick Search", 
+						React.createElement("input", {
+							type: "text", 
+							placeholder: "search..", 
+							value: this.props.filterText, 
+							ref: "filterTextInput", 
+							onChange: this.handleChange}
+						), 
+						React.createElement("div", null, 
+							FilterItems
+						)
 
-
-				</div>
+				)
 				)
 		}
 	});
 
-var SelectedView = React.createClass({
+var SelectedView = React.createClass({displayName: "SelectedView",
 	render: function(){
 		return (
-			<div className="SelectedView">
-				<FilteredResults filterText={this.props.filterText}
-				/>
-			</div>
+			React.createElement("div", {className: "SelectedView"}, 
+				React.createElement(FilteredResults, {filterText: this.props.filterText}
+				)
+			)
 			)
 	}
 });
-	var FilteredResults = React.createClass({
+	var FilteredResults = React.createClass({displayName: "FilteredResults",
 		loadAllCitiesFromServer: function(){
 			ajaxServerRequest().then(fulfilled);
 			var self = this;
@@ -263,12 +232,12 @@ var SelectedView = React.createClass({
 			//console.log(filter);
 
 			var FilteredResults = searchResult.map(function(city){
-				return (<li>{city['data-name']}</li>)
+				return (React.createElement("li", null, city['data-name']))
 			});
 			return (
-				<div className="FilteredResult">
-					{FilteredResults}
-				</div>
+				React.createElement("div", {className: "FilteredResult"}, 
+					FilteredResults
+				)
 				)
 		}
 	});
@@ -276,16 +245,16 @@ var SelectedView = React.createClass({
 		var DataCorners;
 		var DisplayImage;
 
-var App = React.createClass({
+var App = React.createClass({displayName: "App",
 	render: function(){
 		// console.log(filters);
 		//<NavBar/> TODO: Temp removed
 		return (
-				<div className="App">
-					<FilterableView/>
-				</div>
+				React.createElement("div", {className: "App"}, 
+					React.createElement(FilterableView, null)
+				)
 			)
 	}
 });
 
-React.render(<App/>,document.getElementById('content'));
+React.render(React.createElement(App, null),document.getElementById('content'));
