@@ -159,7 +159,7 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 			this.loadFiltersFromServer();
 		},
 		handleChange: function(){
-			console.log('!!!145 - filter name', this.refs.filterName.getDOMNode().innerText);
+			console.dir('!!!145 - filter name', this.refs.filterName.getDOMNode().innerText);
 
 			this.props.onUserInput(
 				this.refs.filterTextInput.getDOMNode().value,

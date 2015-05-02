@@ -55,7 +55,7 @@ var FilterableView = React.createClass({displayName: "FilterableView",
 		}
 	},
 	handleUserInput: function(filterText, selectedOption){
-		//console.log('58 - handleUserInput',filterText, selectedOption);
+		console.log('58 - handleUserInput',filterText, selectedOption);
 
 		//this.state.selectedOptions
 		//	= (selectedOption ?
@@ -91,9 +91,9 @@ var FilterableView = React.createClass({displayName: "FilterableView",
         //}
 	},
 	render: function(){
-        //console.log('95-FilterableView Render',this.state);
+        console.log('95-FilterableView Render',this.state);
 		//<h1>Hello World</h1>
-		//console.log('82 - rendering FilterableView',this.state);
+		console.log('82 - rendering FilterableView',this.state);
 		return (
 			React.createElement("div", null, 
 				React.createElement(FilterMenu, {
@@ -140,8 +140,6 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 			return (React.createElement("div", {className: "FilterViews"}))
 		}
 	});
-
-
 	var FilterItems = React.createClass({displayName: "FilterItems",
 		loadFiltersFromServer: function(){
 			ajaxServerRequest().then(fulfilled);
@@ -159,8 +157,7 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 			this.loadFiltersFromServer();
 		},
 		handleChange: function(){
-			console.log('!!!145 - filter name', this.refs.filterName.getDOMNode().innerText);
-
+			console.log('145 - handleChange', this.refs.filterOptionsInput.getDOMNode().value);
 			this.props.onUserInput(
 				this.refs.filterTextInput.getDOMNode().value,
 				this.refs.filterOptionsInput.getDOMNode().value
@@ -170,22 +167,23 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 			//console.log('FilterItems.this.props',this.props);
 			//var Cost = [].push(<option>{filter.slice(5,filter.length)}</option>);
 			var Cost = AppartmentCostRange.map(function(cost){
-				return( React.createElement("option", {value: cost, ref: "filterOptionsInput"}, 
-                            cost
+				return( React.createElement("option", {
+                            value: cost, 
+                            ref: "filterOptionsInput"
+                        }, "   ", cost
                         ))
 			});
 			//{filter.slice(5,filter.length)}
             //CHECK: onChange correct, onSelect
 			//TODO: The actual filter value is not showing up, correct this
             //TODO: FIX: Not working correctly, only last option is always being selected
-
-            var self = this; //required to reference this in FilterItems
+            var self = this;
 			var FilterItems = this.state.filters.map(function(filter){
 				return (
-					React.createElement("div", {onChange: self.handleChange}, 
-                        React.createElement("span", {ref: "filterName"}, filter), 
-						React.createElement("select", null, 
-
+					React.createElement("div", {ref: "filterText"}, 
+                        filter, 
+						React.createElement("select", {
+							onChange: self.handleChange}, 
                             Cost
 						)
 					)
@@ -210,6 +208,9 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 							onChange: this.handleChange}
 						), 
                         FilterItems
+
+
+
 				)
 				)
 		}
@@ -232,7 +233,7 @@ var SelectedView = React.createClass({displayName: "SelectedView",
 			function fulfilled(response){
 				// cityData = response.cityData;
 				// filters = response.filters;
-				 console.log('168',response); //Test Search: Chiang Mai
+				 console.log('168',response);
 				self.setState({citydata:response});
 			}
 		},

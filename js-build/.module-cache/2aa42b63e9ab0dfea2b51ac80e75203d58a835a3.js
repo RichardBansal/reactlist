@@ -141,7 +141,16 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 		}
 	});
 
-
+    var FilterOptions = React.createClass({displayName: "FilterOptions",
+        render: function(){
+            var Cost = AppartmentCostRange.options.map(function(cost){
+                return( React.createElement("option", {value: cost, ref: "filterOptionsInput"}, 
+                    cost
+                ))
+            });
+            return ({Cost})
+        }
+    });
 	var FilterItems = React.createClass({displayName: "FilterItems",
 		loadFiltersFromServer: function(){
 			ajaxServerRequest().then(fulfilled);
@@ -159,7 +168,7 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 			this.loadFiltersFromServer();
 		},
 		handleChange: function(){
-			console.log('!!!145 - filter name', this.refs.filterName.getDOMNode().innerText);
+			console.log('!!!145 - filter name', this.refs.filterTextInput.getDOMNode().value);
 
 			this.props.onUserInput(
 				this.refs.filterTextInput.getDOMNode().value,
@@ -169,11 +178,6 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 		render: function(){
 			//console.log('FilterItems.this.props',this.props);
 			//var Cost = [].push(<option>{filter.slice(5,filter.length)}</option>);
-			var Cost = AppartmentCostRange.map(function(cost){
-				return( React.createElement("option", {value: cost, ref: "filterOptionsInput"}, 
-                            cost
-                        ))
-			});
 			//{filter.slice(5,filter.length)}
             //CHECK: onChange correct, onSelect
 			//TODO: The actual filter value is not showing up, correct this
@@ -182,11 +186,10 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
             var self = this; //required to reference this in FilterItems
 			var FilterItems = this.state.filters.map(function(filter){
 				return (
-					React.createElement("div", {onChange: self.handleChange}, 
-                        React.createElement("span", {ref: "filterName"}, filter), 
-						React.createElement("select", null, 
-
-                            Cost
+					React.createElement("div", null, 
+                        React.createElement("a", {ref: "filterName"}, filter), 
+						React.createElement("select", {onChange: self.handleChange}, 
+                            React.createElement(FilterOptions, null)
 						)
 					)
 					)

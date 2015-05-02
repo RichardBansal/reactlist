@@ -141,7 +141,11 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 		}
 	});
 
-
+    var FilterOptions = React.createClass({displayName: "FilterOptions",
+        render: function(){
+            
+        }
+    });
 	var FilterItems = React.createClass({displayName: "FilterItems",
 		loadFiltersFromServer: function(){
 			ajaxServerRequest().then(fulfilled);
@@ -159,7 +163,7 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
 			this.loadFiltersFromServer();
 		},
 		handleChange: function(){
-			console.log('!!!145 - filter name', this.refs.filterName.getDOMNode().innerText);
+			console.log('!!!145 - filter name', this.refs.filterTextInput.getDOMNode().value);
 
 			this.props.onUserInput(
 				this.refs.filterTextInput.getDOMNode().value,
@@ -182,9 +186,9 @@ var FilterMenu = React.createClass({displayName: "FilterMenu",
             var self = this; //required to reference this in FilterItems
 			var FilterItems = this.state.filters.map(function(filter){
 				return (
-					React.createElement("div", {onChange: self.handleChange}, 
-                        React.createElement("span", {ref: "filterName"}, filter), 
-						React.createElement("select", null, 
+					React.createElement("div", null, 
+                        React.createElement("a", {ref: "filterName"}, filter), 
+						React.createElement("select", {onChange: self.handleChange}, 
 
                             Cost
 						)

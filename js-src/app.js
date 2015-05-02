@@ -55,14 +55,13 @@ var FilterableView = React.createClass({
 		}
 	},
 	handleUserInput: function(filterText, selectedOption){
-		console.log('58 - handleUserInput',filterText, selectedOption);
+		//console.log('58 - handleUserInput',filterText, selectedOption);
 
 		//this.state.selectedOptions
 		//	= (selectedOption ?
 		//		this.state.selectedOptions.push(selectedOption):
 		//		this.state.selectedOptions);
         //TODO: You need to manage options changed for the same filter
-        //TODO: Assume the filters are different? This won't be the case because of cost i.e.
 
         var updatedSelectedOptions = this.state.selectedOptions;
         updatedSelectedOptions.push(selectedOption);
@@ -92,9 +91,9 @@ var FilterableView = React.createClass({
         //}
 	},
 	render: function(){
-        console.log('95-FilterableView Render',this.state);
+        //console.log('95-FilterableView Render',this.state);
 		//<h1>Hello World</h1>
-		console.log('82 - rendering FilterableView',this.state);
+		//console.log('82 - rendering FilterableView',this.state);
 		return (
 			<div>
 				<FilterMenu
@@ -130,7 +129,7 @@ var FilterMenu = React.createClass({
 });
 	var FilterViews = React.createClass({
 		render: function(){
-			//TODO: Removed below
+			//TODO: Temp removed below
 			//<h3>Filter Views</h3>
 			//<ul>
 			//<li>Grid View</li>
@@ -141,6 +140,8 @@ var FilterMenu = React.createClass({
 			return (<div className="FilterViews"></div>)
 		}
 	});
+
+
 	var FilterItems = React.createClass({
 		loadFiltersFromServer: function(){
 			ajaxServerRequest().then(fulfilled);
@@ -158,7 +159,8 @@ var FilterMenu = React.createClass({
 			this.loadFiltersFromServer();
 		},
 		handleChange: function(){
-			console.log('145 - handleChange', this.refs.filterOptionsInput.getDOMNode().value);
+			console.log('!!!145 - filter name', this.refs.filterName.getDOMNode().innerText);
+
 			this.props.onUserInput(
 				this.refs.filterTextInput.getDOMNode().value,
 				this.refs.filterOptionsInput.getDOMNode().value
@@ -168,22 +170,22 @@ var FilterMenu = React.createClass({
 			//console.log('FilterItems.this.props',this.props);
 			//var Cost = [].push(<option>{filter.slice(5,filter.length)}</option>);
 			var Cost = AppartmentCostRange.map(function(cost){
-				return( <option
-                            value={cost}
-                            ref="filterOptionsInput"
-                        >   {cost}
+				return( <option value={cost} ref="filterOptionsInput">
+                            {cost}
                         </option>)
 			});
 			//{filter.slice(5,filter.length)}
             //CHECK: onChange correct, onSelect
 			//TODO: The actual filter value is not showing up, correct this
             //TODO: FIX: Not working correctly, only last option is always being selected
-            var self = this;
+
+            var self = this; //required to reference this in FilterItems
 			var FilterItems = this.state.filters.map(function(filter){
 				return (
-					<div>
-						<select
-							onChange={self.handleChange}>
+					<div onChange={self.handleChange}>
+                        <span ref="filterName">{filter}</span>
+						<select>
+
                             {Cost}
 						</select>
 					</div>
@@ -207,11 +209,7 @@ var FilterMenu = React.createClass({
 							ref="filterTextInput"
 							onChange={this.handleChange}
 						/>
-						<div>
-							{FilterItems}
-						</div>
-
-
+                        {FilterItems}
 				</div>
 				)
 		}
@@ -234,7 +232,7 @@ var SelectedView = React.createClass({
 			function fulfilled(response){
 				// cityData = response.cityData;
 				// filters = response.filters;
-				 console.log('168',response);
+				 console.log('168',response); //Test Search: Chiang Mai
 				self.setState({citydata:response});
 			}
 		},
