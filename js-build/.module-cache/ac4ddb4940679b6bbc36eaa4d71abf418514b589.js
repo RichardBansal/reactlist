@@ -32,24 +32,24 @@ var DataFilters = [
     {filterName: "data-nomadcost", filterData: ["500","1000","1500","2000","3000","5000"]}
 ];
 
-var NavBar = React.createClass({
+var NavBar = React.createClass({displayName: "NavBar",
 	render: function(){
 		var NavBar = Links.map(function(link){
-			return (<li>{link}</li>
+			return (React.createElement("li", null, link)
 				)
 		});
 		return (
-			<div className="NavBar">
-				<h1>Navigation</h1>
-				<ul>
-					{NavBar}
-				</ul>
-			</div>
+			React.createElement("div", {className: "NavBar"}, 
+				React.createElement("h1", null, "Navigation"), 
+				React.createElement("ul", null, 
+					NavBar
+				)
+			)
 			) 
 	}
 });
 
-var FilterableView = React.createClass({
+var FilterableView = React.createClass({displayName: "FilterableView",
 	getInitialState: function(){
 		return {
 			//straight text debounce search
@@ -67,101 +67,74 @@ var FilterableView = React.createClass({
 		//		this.state.selectedOptions.push(selectedOption):
 		//		this.state.selectedOptions);
         //TODO: You need to manage options changed for the same filter
-        //if(updatedSelectedOptions.indexOf(selectedOption))
-        var wasReplaced = false;
-        //TODO: Bug where when you change the search, you erase the selectedOptions
-        if(selectedOption){
-            var updatedSelectedOptions = this.state.selectedOptions;
-            updatedSelectedOptions.forEach(function(options,index){
-                if(options.filter === selectedOption.filter){
-                    options.value = selectedOption.value;
-                    wasReplaced = true;
-                    return;
-                }
-            });
-            if(!wasReplaced){
-                updatedSelectedOptions.push(selectedOption);
-            }
-        }
+        var updatedSelectedOptions = this.state.selectedOptions;
+        if(updatedSelectedOptions.indexOf(selectedOption))
+        updatedSelectedOptions.push(selectedOption);
         //if(selectedOptions.length==0){
         //    selectedOptions.push(selectedOption);
         //}
         //var tempStateArr = this.state.selectedOptions;
         //console.log('77',Array.isArray(tempStateArr));
         //if(!selectedOption)
-        //this.setState({
-        //    filterText: filterText,
-        //    selectedOptions: updatedSelectedOptions
-        //});
-        //TODO: Last character is not being recorded in state
-        //TODO: This creates bug: Just noticed a bug ‘Kin’ shouldn’t show ‘Kot’….lol
-        if((!selectedOption)&&(filterText)){
-			//this.setState({
-			//	filterText: filterText,
-			//});
-            this.setState({
-                filterText: filterText//,
-                //selectedOptions: updatedSelectedOptions
-            });
-        } else if (!filterText&&selectedOption){
-			//this.setState({
-			//	selectedOptions: this.state.selectedOptions.push(selectedOption)
-			//});
-            this.setState({
-                //filterText: filterText,
-                selectedOptions: updatedSelectedOptions
-            });
-        } else {
-			//this.setState({
-			//	filterText: filterText,
-			//	selectedOptions: this.state.selectedOptions.push(selectedOption)
-			//});
-            this.setState({
-                filterText: filterText,
-                selectedOptions: updatedSelectedOptions
-            });
-        }
 
-        console.log('123.handleUserInput.setState',this.state);
+        this.setState({
+            filterText: filterText,
+            selectedOptions: updatedSelectedOptions
+        });
+        console.log('82.handleUserInput.setState',this.state);
+        //if(!selectedOption){
+			//this.setState({
+			//	filterText: filterText,
+			//});
+        //} else if (!filterText){
+			//this.setState({
+			//	selectedOptions: this.state.selectedOptions.push(selectedOption)
+			//});
+        //} else {
+			//this.setState({
+			//	filterText: filterText,
+			//	selectedOptions: this.state.selectedOptions.push(selectedOption)
+			//});
+        //}
 	},
 	render: function(){
         //console.log('95-FilterableView Render',this.state);
 		//<h1>Hello World</h1>
 		//console.log('82 - rendering FilterableView',this.state);
 		return (
-			<div>
-				<FilterMenu
-					filterText={this.state.filterText}
-					selectedOptions={this.state.selectedOptions}
-					onUserInput={this.handleUserInput}
-				/>
-				<SelectedView
-					filterText={this.state.filterText}
-					selectedOptions={this.state.selectedOptions}
-				/>
-			</div>
+			React.createElement("div", null, 
+				React.createElement(FilterMenu, {
+					filterText: this.state.filterText, 
+					selectedOptions: this.state.selectedOptions, 
+					onUserInput: this.handleUserInput}
+				), 
+				React.createElement(SelectedView, {
+					filterText: this.state.filterText, 
+					selectedOptions: this.state.selectedOptions}
+				)
+			)
 		)
 	}
 });
 
-    var FilterMenu = React.createClass({
+    var FilterMenu = React.createClass({displayName: "FilterMenu",
         handleUserInput: function(filterText, selectedOption){
             this.props.onUserInput(filterText, selectedOption);
         },
         render: function(){
             return (
-                <div className="FilterMenu">
-                    <FilterViews/>
-                    <FilterItems
-                        filterText={this.props.filterText}
-                        selectedOptions={this.props.selectedOptions}
-                        onUserInput={this.handleUserInput}
-                    />
-                </div>
+                React.createElement("div", {className: "FilterMenu"}, 
+                    React.createElement(FilterViews, null), 
+                    React.createElement(FilterItems, {
+                        filterText: this.props.filterText, 
+                        selectedOptions: this.props.selectedOptions, 
+                        onUserInput: this.handleUserInput}
+                    )
+                )
                 )
         }
     });
-        var FilterViews = React.createClass({
+        var FilterViews = React.createClass({displayName: "FilterViews",
             render: function(){
                 //TODO: Temp removed below
                 //<h3>Filter Views</h3>
@@ -171,10 +144,10 @@ var FilterableView = React.createClass({
                 //<li>Map View</li>
                 //<li>Settings View</li>
                 //</ul>
-                return (<div className="FilterViews"></div>)
+                return (React.createElement("div", {className: "FilterViews"}))
             }
         });
-        var FilterItems = React.createClass({
+        var FilterItems = React.createClass({displayName: "FilterItems",
             loadFiltersFromServer: function(){
                 ajaxServerRequest().then(fulfilled);
                 var self = this;
@@ -200,20 +173,20 @@ var FilterableView = React.createClass({
                 //TODO: State representation of selected filters
                 //TODO: How to handle showing all selectedOptions
                 return (
-                    <div className="FilterItems">
-                            <FilterInput
-                                filterText={this.props.filterText}
-                                onUserInput={this.handleUserInput}
-                                />
-                            <FilterDropDown
-                                selectedOptions={this.props.selectedOptions}
-                                onUserInput={this.handleUserInput}
-                                />
-                    </div>
+                    React.createElement("div", {className: "FilterItems"}, 
+                            React.createElement(FilterInput, {
+                                filterText: this.props.filterText, 
+                                onUserInput: this.handleUserInput}
+                                ), 
+                            React.createElement(FilterDropDown, {
+                                selectedOptions: this.props.selectedOptions, 
+                                onUserInput: this.handleUserInput}
+                                )
+                    )
                     )
             }
         });
-            var FilterInput = React.createClass({
+            var FilterInput = React.createClass({displayName: "FilterInput",
                 handleUserInput: function(){
                     this.props.onUserInput(
                         this.refs.filterTextInput.getDOMNode().value,
@@ -222,17 +195,17 @@ var FilterableView = React.createClass({
                 },
                 render: function(){
                     return (
-                                <input
-                                type="text"
-                                placeholder="Search..."
-                                value={this.props.filterText}
-                                ref="filterTextInput"
-                                onChange={this.handleUserInput}
-                                />
+                                React.createElement("input", {
+                                type: "text", 
+                                placeholder: "Search...", 
+                                value: this.props.filterText, 
+                                ref: "filterTextInput", 
+                                onChange: this.handleUserInput}
+                                )
                             )
                 }
             });
-            var FilterDropDown = React.createClass({
+            var FilterDropDown = React.createClass({displayName: "FilterDropDown",
                 //getInitialState: function(){
                 //    //TODO: YOU WERE WORKING HERE
                 //},
@@ -269,24 +242,24 @@ var FilterableView = React.createClass({
 
                     var FilterArr = DataFilters.map(function(filter){
                         return (
-                                <div>
-                                    {filter.filterName}
-                                    <FilterOptions
-                                    selectedOptions={this.props.selectedOptions}
-                                    onUserInput={this.handleUserInput}
-                                    filterName={filter.filterName}
-                                    filterData={filter.filterData}
-                                    />
-                                </div>
+                                React.createElement("div", null, 
+                                    filter.filterName, 
+                                    React.createElement(FilterOptions, {
+                                    selectedOptions: this.props.selectedOptions, 
+                                    onUserInput: this.handleUserInput, 
+                                    filterName: filter.filterName, 
+                                    filterData: filter.filterData}
+                                    )
+                                )
                             )
                     }.bind(this));
 
-                    return (<div>
-                                {FilterArr}
-                            </div>)
+                    return (React.createElement("div", null, 
+                                FilterArr
+                            ))
                 }
             });
-                var FilterOptions = React.createClass({
+                var FilterOptions = React.createClass({displayName: "FilterOptions",
                     getInitialState: function(){
                         return {
                             value: undefined
@@ -349,33 +322,33 @@ var FilterableView = React.createClass({
                         http://stackoverflow.com/questions/21733847/react-jsx-selecting-selected-on-selected-select-option
                         //http://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down
                         return (
-                            <div>
-                                <select onChange={this.handleUserInput} value={this.state.value}>
-                                {this.props.filterData.map(function(item) {
+                            React.createElement("div", null, 
+                                React.createElement("select", {onChange: this.handleUserInput, value: this.state.value}, 
+                                this.props.filterData.map(function(item) {
                                     return (
-                                        <option value={item}> Less than {item}
-                                        </option>
+                                        React.createElement("option", {value: item}, " Less than ", item
+                                        )
                                     );
-                                }, this)}
-                                </select>
-                            </div>
+                                }, this)
+                                )
+                            )
                         );
                     }
                 });
 
-    var SelectedView = React.createClass({
+    var SelectedView = React.createClass({displayName: "SelectedView",
         render: function(){
             return (
-                <div className="SelectedView">
-                    <FilteredResults
-                        filterText={this.props.filterText}
-                        selectedOptions={this.props.selectedOptions}
-                    />
-                </div>
+                React.createElement("div", {className: "SelectedView"}, 
+                    React.createElement(FilteredResults, {
+                        filterText: this.props.filterText, 
+                        selectedOptions: this.props.selectedOptions}
+                    )
+                )
                 )
         }
     });
-        var FilteredResults = React.createClass({
+        var FilteredResults = React.createClass({displayName: "FilteredResults",
             loadAllCitiesFromServer: function(){
                 ajaxServerRequest().then(fulfilled);
                 var self = this;
@@ -410,18 +383,8 @@ var FilterableView = React.createClass({
                     //console.log('381',city);
                     //TODO: Clean-up, initial state does not have filter properties set.
                     //if()
-                    //TODO: Only allowed search or filter, not both yet
-                    if((self.props.selectedOptions)&&(self.props.filterText)){
-                        var filter = self.props.selectedOptions[filter];
-                        var tempArr = Array.prototype.slice.call(self.props.selectedOptions);
-                        var result = tempArr.every(function(filterObj){
-                            return (parseInt(city[filterObj.filter]) < filterObj.value);
-                        });
-                        result=result && city['data-name'].indexOf(self.props.filterText) !== -1;
-                        return (
-                            result
-                        )
-                    } else if(self.props.selectedOptions){
+                    //TODO: Only allowe search or filter, not both year
+                    if(self.props.selectedOptions){
                         var filter = self.props.selectedOptions[filter];
                         //console.log('386',filter);
                         //console.log(
@@ -431,17 +394,8 @@ var FilterableView = React.createClass({
                         //    city[filter],
                         //    self.props.selectedOptions.value
                         //);
-                        //{value:"500",filter:"nomadCost"}
-                        var tempArr = Array.prototype.slice.call(self.props.selectedOptions);
-                        var result = tempArr.every(function(filterObj){
-                            return (parseInt(city[filterObj.filter]) < filterObj.value);
-                        });
-                        //console.log(result);
-                        //TODO: Assumed this is working, to test!
-                        //TODO: Set initial values for options, its empty, not i.e. 'LESS than 500' on load
                         return (
-                        //parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-                            result
+                        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
                         )
                     } else {
                         return (
@@ -461,12 +415,12 @@ var FilterableView = React.createClass({
                 //console.log(filter);
 
                 var FilteredResults = searchResult.map(function(city){
-                    return (<li>{city['data-name']}</li>)
+                    return (React.createElement("li", null, city['data-name']))
                 });
                 return (
-                    <div className="FilteredResult">
-                        {FilteredResults}
-                    </div>
+                    React.createElement("div", {className: "FilteredResult"}, 
+                        FilteredResults
+                    )
                     )
             }
         });
@@ -474,18 +428,16 @@ var FilterableView = React.createClass({
             var DataCorners;
             var DisplayImage;
 
-var App = React.createClass({
+var App = React.createClass({displayName: "App",
 	render: function(){
 		// console.log(filters);
 		//<NavBar/> TODO: Temp removed
 		return (
-				<div className="App">
-					<FilterableView/>
-				</div>
+				React.createElement("div", {className: "App"}, 
+					React.createElement(FilterableView, null)
+				)
 			)
 	}
 });
 
-React.render(<App/>,document.getElementById('content'));
-
-//NEXT: Actually using multiple filters
+React.render(React.createElement(App, null),document.getElementById('content'));
