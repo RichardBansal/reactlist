@@ -10,7 +10,7 @@ var ajaxServerRequest = function(){
 	return $.ajax(
 			{
 				url:url,
-				dataType: 'jsonp',
+				dataType: 'json',
 				success: function(data)
 				{
 					data.length = 10;
@@ -72,7 +72,7 @@ var FilterableView = React.createClass({
         //if(updatedSelectedOptions.indexOf(selectedOption))
         var wasReplaced = false;
         //TODO: Bug where when you change the search, you erase the selectedOptions
-        if(selectedOptions){
+        if(selectedOption){
             var updatedSelectedOptions = this.state.selectedOptions;
             updatedSelectedOptions.forEach(function(options,index){
                 if(options.filter === selectedOption.filter){

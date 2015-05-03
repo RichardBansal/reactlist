@@ -10,9 +10,9 @@ var $ = require('jquery');
 var ajaxServerRequest = function ajaxServerRequest() {
     var url = 'http://localhost:5000/';
     console.log('request data', url);
-    return $.get({
+    return $.ajax({
         url: url,
-        dataType: 'jsonp',
+        dataType: 'json',
         success: function success(data) {
             data.length = 10;
             var dataObj = {
