@@ -381,7 +381,7 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                     //console.log('381',city);
                     //TODO: Clean-up, initial state does not have filter properties set.
                     //if()
-                    //TODO: Only allowe search or filter, not both year
+                    //TODO: Only allowe search or filter
                     if(self.props.selectedOptions){
                         var filter = self.props.selectedOptions[filter];
                         console.log('386',filter);
@@ -397,9 +397,10 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                         )
                     } else {
                         return (
-                            city['data-name'].indexOf(self.props.filterText) !== -1
+                            city['data-name'] === self.props.filterText
                         )
                     }
+
                     //return (
                     //        city['data-name'] === self.props.filterText ||
                     //        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value

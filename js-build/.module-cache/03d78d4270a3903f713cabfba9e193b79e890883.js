@@ -25,12 +25,6 @@ var ajaxServerRequest = function(){
 var Links = ["Cities", "Forum", "Chat", "Guides", "Remote Jobs", "Meetups", "Stories", "Signup"];
 
 var AppartmentCostRange = [125,250,500,1000,2000];
-var DataFilters = [
-    {filterName: "data-long-term-cost", filterData: ["500","1000","1500","2000","3000","5000"]},
-    {filterName: "data-apartment-cost", filterData: ["125","250","500","1000","2000"]},
-    {filterName: "data-hotel-price", filterData: ["3","5","10","25","50"]},
-    {filterName: "data-nomadcost", filterData: ["500","1000","1500","2000","3000","5000"]}
-];
 
 var NavBar = React.createClass({displayName: "NavBar",
 	render: function(){
@@ -212,10 +206,10 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                     //are you getting the filter and the filter option
                     //wrap the option and the correct filter
                     //console.log('205',this.refs.filterDropDown.getDOMNode().value);
-                    this.props.onUserInput(
-                        undefined,
-                        selectedOption
-                    )
+                    //this.props.onUserInput(
+                    //    undefined,
+                    //    this.refs.filterDropDown.getDOMNode().value
+                    //)
                 },
                 render:function(){
                     //var Selects = [];
@@ -233,27 +227,13 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                     //                selectedOptions={this.props.selectedOptions}/>
                     //        </select>)
                     //};
-                    //TODO: For each filter you need to send the appropriate data down
-                    //var FilterName = DataFilters.map(function(filter){
-                    //    return filter.filterName;
-                    //});
-
-                    var FilterArr = DataFilters.map(function(filter){
-                        return (
-                                React.createElement("div", null, 
-                                    filter.filterName, 
-                                    React.createElement(FilterOptions, {
+                    var Filter
+                    return (React.createElement("div", null, 
+                                React.createElement(FilterOptions, {
                                     selectedOptions: this.props.selectedOptions, 
                                     onUserInput: this.handleUserInput, 
-                                    filterName: filter.filterName, 
-                                    filterData: filter.filterData}
-                                    )
+                                    filterName: "testing123"}
                                 )
-                            )
-                    }.bind(this));
-
-                    return (React.createElement("div", null, 
-                                FilterArr
                             ))
                 }
             });
@@ -270,7 +250,7 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                     //
                     //},
                     handleUserInput: function(event){
-                        console.log('273.FilterOptions.handleUserInput',event.target.value, this.props.filterName);
+                        console.log(event.target.value, this.props.filterName);
                         this.setState({value:event.target.value});
                         this.props
                             .onUserInput
@@ -322,7 +302,7 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                         return (
                             React.createElement("div", null, 
                                 React.createElement("select", {onChange: this.handleUserInput, value: this.state.value}, 
-                                this.props.filterData.map(function(item) {
+                                AppartmentCostRange.map(function(item) {
                                     return (
                                         React.createElement("option", {value: item}, " Less than ", item
                                         )
@@ -376,37 +356,15 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                 //TODO: You need an option to add more filters to show, so
                 //only show a subset list to begin with
                 //TODO: Search only works for one item, at a time, so either cost or search Needs to be more robust
-                var searchResult = [];
                 var searchResult = this.state.citydata.filter(function(city){
-                    //console.log('381',city);
-                    //TODO: Clean-up, initial state does not have filter properties set.
-                    //if()
-                    //TODO: Only allowe search or filter, not both year
-                    if(self.props.selectedOptions){
-                        var filter = self.props.selectedOptions[filter];
-                        console.log('386',filter);
-                        console.log(
-                            '386.render.FilteredResutls',
-                            //    //city['data-apartment-cost'] < 500,
-                            //    //self.props.selectedOptions
-                            city[filter],
-                            self.props.selectedOptions.value
-                        );
-                        return (
-                        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-                        )
-                    } else {
-                        return (
-                            city['data-name'].indexOf(self.props.filterText) !== -1
-                        )
-                    }
-                    //return (
-                    //        city['data-name'] === self.props.filterText ||
-                    //        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-                    //        );
+                    console.log(city['data-apartment-cost'] < 500, self.props.selectedOptions);
+                    return (
+                            city['data-name'] === self.props.filterText ||
+                            parseInt(city['data-apartment-cost']) < self.props.selectedOptions
+                            );
                 });
 
-                console.log('397.searchResult',searchResult);
+                console.log(searchResult);
 
 
 

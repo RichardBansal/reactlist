@@ -26,10 +26,10 @@ var Links = ["Cities", "Forum", "Chat", "Guides", "Remote Jobs", "Meetups", "Sto
 
 var AppartmentCostRange = [125,250,500,1000,2000];
 var DataFilters = [
-    {filterName: "data-long-term-cost", filterData: ["500","1000","1500","2000","3000","5000"]},
-    {filterName: "data-apartment-cost", filterData: ["125","250","500","1000","2000"]},
-    {filterName: "data-hotel-price", filterData: ["3","5","10","25","50"]},
-    {filterName: "data-nomadcost", filterData: ["500","1000","1500","2000","3000","5000"]}
+    {filterName: "Cost of living", filterData: ["500","1000","1500","2000","3000","5000"]},
+    {filterName: "Apartment cost", filterData: ["125","250","500","1000","2000"]},
+    {filterName: "Hotel Cost", filterData: ["3","5","10","25","50"]},
+    {filterName: "Nomad cost", filterData: ["500","1000","1500","2000","3000","5000"]}
 ];
 
 var NavBar = React.createClass({displayName: "NavBar",
@@ -376,37 +376,23 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                 //TODO: You need an option to add more filters to show, so
                 //only show a subset list to begin with
                 //TODO: Search only works for one item, at a time, so either cost or search Needs to be more robust
-                var searchResult = [];
                 var searchResult = this.state.citydata.filter(function(city){
-                    //console.log('381',city);
-                    //TODO: Clean-up, initial state does not have filter properties set.
-                    //if()
-                    //TODO: Only allowe search or filter, not both year
-                    if(self.props.selectedOptions){
-                        var filter = self.props.selectedOptions[filter];
-                        console.log('386',filter);
-                        console.log(
-                            '386.render.FilteredResutls',
-                            //    //city['data-apartment-cost'] < 500,
-                            //    //self.props.selectedOptions
-                            city[filter],
-                            self.props.selectedOptions.value
-                        );
-                        return (
-                        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-                        )
-                    } else {
-                        return (
-                            city['data-name'].indexOf(self.props.filterText) !== -1
-                        )
-                    }
-                    //return (
-                    //        city['data-name'] === self.props.filterText ||
-                    //        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-                    //        );
+                    console.log(city);
+                    console.log(
+                        '380.render.FilteredResutls',
+                        //city['data-apartment-cost'] < 500,
+                        //self.props.selectedOptions
+                        self.props.selectedOptions//,
+                        //self.props.selectedOptions.value
+                    );
+
+                    return (
+                            city['data-name'] === self.props.filterText //||
+                            //parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
+                            );
                 });
 
-                console.log('397.searchResult',searchResult);
+                console.log(searchResult);
 
 
 

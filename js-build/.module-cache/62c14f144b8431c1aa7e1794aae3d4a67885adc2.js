@@ -381,29 +381,21 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                     //console.log('381',city);
                     //TODO: Clean-up, initial state does not have filter properties set.
                     //if()
-                    //TODO: Only allowe search or filter, not both year
-                    if(self.props.selectedOptions){
-                        var filter = self.props.selectedOptions[filter];
-                        console.log('386',filter);
-                        console.log(
-                            '386.render.FilteredResutls',
-                            //    //city['data-apartment-cost'] < 500,
-                            //    //self.props.selectedOptions
-                            city[filter],
-                            self.props.selectedOptions.value
-                        );
-                        return (
-                        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-                        )
-                    } else {
-                        return (
-                            city['data-name'].indexOf(self.props.filterText) !== -1
-                        )
-                    }
-                    //return (
-                    //        city['data-name'] === self.props.filterText ||
-                    //        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-                    //        );
+                    console.log('384',self.props.selectedOptions);
+                    var filter = self.props.selectedOptions[filter];
+                    console.log('386',filter);
+                    console.log(
+                        '386.render.FilteredResutls',
+                    //    //city['data-apartment-cost'] < 500,
+                    //    //self.props.selectedOptions
+                        city[filter],
+                        self.props.selectedOptions.value
+                    );
+
+                    return (
+                            city['data-name'] === self.props.filterText ||
+                            parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
+                            );
                 });
 
                 console.log('397.searchResult',searchResult);

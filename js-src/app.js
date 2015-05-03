@@ -25,6 +25,12 @@ var ajaxServerRequest = function(){
 var Links = ["Cities", "Forum", "Chat", "Guides", "Remote Jobs", "Meetups", "Stories", "Signup"];
 
 var AppartmentCostRange = [125,250,500,1000,2000];
+var DataFilters = [
+    {filterName: "data-long-term-cost", filterData: ["500","1000","1500","2000","3000","5000"]},
+    {filterName: "data-apartment-cost", filterData: ["125","250","500","1000","2000"]},
+    {filterName: "data-hotel-price", filterData: ["3","5","10","25","50"]},
+    {filterName: "data-nomadcost", filterData: ["500","1000","1500","2000","3000","5000"]}
+];
 
 var NavBar = React.createClass({
 	render: function(){
@@ -170,7 +176,7 @@ var FilterableView = React.createClass({
                                 filterText={this.props.filterText}
                                 onUserInput={this.handleUserInput}
                                 />
-                            <FilterOptions
+                            <FilterDropDown
                                 selectedOptions={this.props.selectedOptions}
                                 onUserInput={this.handleUserInput}
                                 />
@@ -198,39 +204,64 @@ var FilterableView = React.createClass({
                 }
             });
             var FilterDropDown = React.createClass({
-                handleUserInput: function(){
+                //getInitialState: function(){
+                //    //TODO: YOU WERE WORKING HERE
+                //},
+                handleUserInput: function(undefined,selectedOption){
+                    console.log('205.FilterDropDown.handleUserInput',selectedOption);
                     //are you getting the filter and the filter option
                     //wrap the option and the correct filter
-                    console.log('205',this.refs.filterDropDown.getDOMNode().value);
-                    //this.props.onUserInput(
-                    //    undefined,
-                    //    this.refs.filterDropDown.getDOMNode().value
-                    //)
+                    //console.log('205',this.refs.filterDropDown.getDOMNode().value);
+                    this.props.onUserInput(
+                        undefined,
+                        selectedOption
+                    )
                 },
                 render:function(){
-                    var Selects = [];
+                    //var Selects = [];
+                    //
+                    //for(var i = 0;i<1;i++){
+                    //    Selects.push(
+                    //        {i},
+                    //        <select
+                    //            value="Select"
+                    //            ref="filterDropDown"
+                    //            key={i}>
+                    //            <FilterOptions
+                    //                onChange={this.handleUserInput}
+                    //                onUserInput={this.handleUserInput}
+                    //                selectedOptions={this.props.selectedOptions}/>
+                    //        </select>)
+                    //};
+                    //TODO: For each filter you need to send the appropriate data down
+                    //var FilterName = DataFilters.map(function(filter){
+                    //    return filter.filterName;
+                    //});
 
-                    for(var i = 0;i<1;i++){
-                        Selects.push(
-                            {i},
-                            <select
-                                value="Select"
-                                ref="filterDropDown"
-                                key={i}>
-                                <FilterOptions
-                                    onChange={this.handleUserInput}
+                    var FilterArr = DataFilters.map(function(filter){
+                        return (
+                                <div>
+                                    {filter.filterName}
+                                    <FilterOptions
+                                    selectedOptions={this.props.selectedOptions}
                                     onUserInput={this.handleUserInput}
-                                    selectedOptions={this.props.selectedOptions}/>
-                            </select>)
-                    };
+                                    filterName={filter.filterName}
+                                    filterData={filter.filterData}
+                                    />
+                                </div>
+                            )
+                    }.bind(this));
 
-                    return (<div>{Selects}</div>)
+                    return (<div>
+                                {FilterArr}
+                            </div>)
                 }
             });
                 var FilterOptions = React.createClass({
                     getInitialState: function(){
                         return {
-                            value: 'select'
+                            value: undefined
+
                         }
                     },
                     //change: function(event){
@@ -239,9 +270,18 @@ var FilterableView = React.createClass({
                     //
                     //},
                     handleUserInput: function(event){
-                        console.log(event.target.value);
+                        console.log('273.FilterOptions.handleUserInput',event.target.value, this.props.filterName);
                         this.setState({value:event.target.value});
-                        this.props.onUserInput(undefined,event.target.value);
+                        this.props
+                            .onUserInput
+                                    (
+                                        undefined,
+                                        {
+                                            value:event.target.value,
+                                            filter:this.props.filterName
+                                        }
+                                    )
+                        //event.target.value);
                         //console.log(this.refs.) /
                         //console.log('in FilterOptions handlerUserInput',typeof i);
                         //get the option selected to pass in
@@ -282,7 +322,7 @@ var FilterableView = React.createClass({
                         return (
                             <div>
                                 <select onChange={this.handleUserInput} value={this.state.value}>
-                                {AppartmentCostRange.map(function(item) {
+                                {this.props.filterData.map(function(item) {
                                     return (
                                         <option value={item}> Less than {item}
                                         </option>
@@ -336,15 +376,37 @@ var FilterableView = React.createClass({
                 //TODO: You need an option to add more filters to show, so
                 //only show a subset list to begin with
                 //TODO: Search only works for one item, at a time, so either cost or search Needs to be more robust
+                var searchResult = [];
                 var searchResult = this.state.citydata.filter(function(city){
-                    console.log(city['data-apartment-cost'] < 500, self.props.selectedOptions);
-                    return (
-                            city['data-name'] === self.props.filterText ||
-                            parseInt(city['data-apartment-cost']) < self.props.selectedOptions
-                            );
+                    //console.log('381',city);
+                    //TODO: Clean-up, initial state does not have filter properties set.
+                    //if()
+                    //TODO: Only allowe search or filter, not both year
+                    if(self.props.selectedOptions){
+                        var filter = self.props.selectedOptions[filter];
+                        console.log('386',filter);
+                        console.log(
+                            '386.render.FilteredResutls',
+                            //    //city['data-apartment-cost'] < 500,
+                            //    //self.props.selectedOptions
+                            city[filter],
+                            self.props.selectedOptions.value
+                        );
+                        return (
+                        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
+                        )
+                    } else {
+                        return (
+                            city['data-name'].indexOf(self.props.filterText) !== -1
+                        )
+                    }
+                    //return (
+                    //        city['data-name'] === self.props.filterText ||
+                    //        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
+                    //        );
                 });
 
-                console.log(searchResult);
+                console.log('397.searchResult',searchResult);
 
 
 

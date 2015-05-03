@@ -397,6 +397,7 @@ var FilterableView = React.createClass({displayName: "FilterableView",
                         )
                     } else {
                         return (
+                        //product.name.indexOf(this.props.filterText) === -1
                             city['data-name'].indexOf(self.props.filterText) !== -1
                         )
                     }
