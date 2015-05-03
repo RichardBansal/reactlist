@@ -1,14 +1,16 @@
 //REF:https://magic.import.io/
 //ASK: Warning: Each child in an array or iterator should have a unique "key" prop. Check the render method of FilterItems. See http://fb.me/react-warning-keys for more information.
-console.log('App started');
+console.log('App starting');
+var React = require('react');
+var $ = require('jquery');
 
 var ajaxServerRequest = function(){
-	url = "http://localhost:5000/";
-	console.log('request data');
+	var url = "http://localhost:5000/";
+	console.log('request data',url);
 	return $.ajax(
 			{
 				url:url,
-				dataType: 'json',
+				dataType: 'jsonp',
 				success: function(data)
 				{
 					data.length = 10;
@@ -70,7 +72,7 @@ var FilterableView = React.createClass({
         //if(updatedSelectedOptions.indexOf(selectedOption))
         var wasReplaced = false;
         //TODO: Bug where when you change the search, you erase the selectedOptions
-        if(selectedOption){
+        if(selectedOptions){
             var updatedSelectedOptions = this.state.selectedOptions;
             updatedSelectedOptions.forEach(function(options,index){
                 if(options.filter === selectedOption.filter){
@@ -85,7 +87,7 @@ var FilterableView = React.createClass({
         }
         //if(selectedOptions.length==0){
         //    selectedOptions.push(selectedOption);
-        //}
+        //} testing123
         //var tempStateArr = this.state.selectedOptions;
         //console.log('77',Array.isArray(tempStateArr));
         //if(!selectedOption)
