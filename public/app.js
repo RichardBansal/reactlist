@@ -75,7 +75,7 @@ var FilterableView = React.createClass({
     getInitialState: function getInitialState() {
         return {
             //straight text debounce search
-            filterText: undefined,
+            filterText: '',
             //TODO: Include more search options from cityData.json
             //{filter:optionSelected}
             selectedOptions: [] //TODO: Include option for added multiple Options, only one value right now
@@ -117,37 +117,51 @@ var FilterableView = React.createClass({
         //});
         //TODO: Last character is not being recorded in state
         //TODO: This creates bug: Just noticed a bug ‘Kin’ shouldn’t show ‘Kot’….lol
-        if (!selectedOption && filterText) {
-            //this.setState({
-            //	filterText: filterText,
-            //});
-            console.log('1', filterText);
-            this.setState({
-                filterText: filterText //,
-                //selectedOptions: updatedSelectedOptions
-            });
-            console.log('123.handleUserInput.setState', this.state);
-        } else if (!filterText && selectedOption) {
-            //this.setState({
-            //	selectedOptions: this.state.selectedOptions.push(selectedOption)
-            //});
-            this.setState({
-                //filterText: filterText,
-                selectedOptions: updatedSelectedOptions
-            });
-            console.log('123.handleUserInput.setState', this.state);
-        } else {
-            //this.setState({
-            //	filterText: filterText,
-            //	selectedOptions: this.state.selectedOptions.push(selectedOption)
-            //});
-            console.log('3', filterText);
-            this.setState({
-                filterText: undefined,
-                selectedOptions: updatedSelectedOptions
-            });
-            console.log('123.handleUserInput.setState', this.state);
-        }
+
+        //selectedOption
+        //filterText
+
+        //this.state.filterText = filterText.length > 0 ? filterText : '';
+        //this.state.selectedOptions = updatedSelectedOptions || this.state.selectedOptions;
+
+        console.log('115 - before state change, current state', this.state);
+        filterText = filterText || '';
+        //console.log('117',!!this.state.filterText,!!selectedOption);
+        this.setState({
+            filterText: filterText.length > 0 ? filterText : '',
+            selectedOptions: updatedSelectedOptions || this.state.selectedOptions
+        });
+        //if((!selectedOption)&&(filterText.length > 0)){
+        ////this.setState({
+        ////	filterText: filterText,
+        ////});
+        //    console.log('1',filterText)
+        //    this.setState({
+        //        filterText: filterText//,
+        //        //selectedOptions: updatedSelectedOptions
+        //    });
+        //    console.log('123.handleUserInput.setState',this.state);
+        //} else if (filterText.length === 0 && selectedOption){
+        ////this.setState({
+        ////	selectedOptions: this.state.selectedOptions.push(selectedOption)
+        ////});
+        //    this.setState({
+        //        filterText: '',
+        //        selectedOptions: updatedSelectedOptions
+        //    });
+        //    console.log('123.handleUserInput.setState',this.state);
+        //} else {
+        ////this.setState({
+        ////	filterText: filterText,
+        ////	selectedOptions: this.state.selectedOptions.push(selectedOption)
+        ////});
+        //    console.log('3',filterText)
+        //    this.setState({
+        //        filterText: '',
+        //        selectedOptions: updatedSelectedOptions
+        //    });
+        //    console.log('123.handleUserInput.setState',this.state);
+        //}
 
         //console.log('123.handleUserInput.setState',this.state);
     },
