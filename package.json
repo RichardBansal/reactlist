@@ -21,6 +21,12 @@
     "browserify": "^10.0.0",
     "reactify": "^1.1.0",
     "vinyl-source-stream": "^1.1.0",
-    "jquery": "^2.1.4"
+    "jquery": "^2.1.4",
+    "react-tap-event-plugin": "^0.1.6",
+    "material-ui": "^0.7.5",
+    "gulp-less": "^3.0.3",
+    "babel-runtime": "^5.2.9",
+    "react-flexgrid": "^0.5.0",
+    "react-grid-layout": "^0.8.3"
   }
 }

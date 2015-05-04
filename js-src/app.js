@@ -3,6 +3,13 @@
 console.log('App starting');
 var React = require('react');
 var $ = require('jquery');
+var mui = require('material-ui');
+var RaisedButton = mui.RaisedButton;
+var TextField = mui.TextField;
+var Paper = mui.Paper;
+var LeftNav = mui.LeftNav;
+var DropDownMenu = mui.DropDownMenu;
+var {Container,Block} = require('react-flexgrid');
 
 var ajaxServerRequest = function(){
 	var url = "http://localhost:5000/";
@@ -153,12 +160,12 @@ var FilterableView = React.createClass({
         render: function(){
             return (
                 <div className="FilterMenu">
-                    <FilterViews/>
-                    <FilterItems
+                        <FilterViews/>
+                        <FilterItems
                         filterText={this.props.filterText}
                         selectedOptions={this.props.selectedOptions}
                         onUserInput={this.handleUserInput}
-                    />
+                        />
                 </div>
                 )
         }
@@ -216,20 +223,21 @@ var FilterableView = React.createClass({
             }
         });
             var FilterInput = React.createClass({
-                handleUserInput: function(){
+                handleUserInput: function(event){
+                    console.dir(event.target.value);
                     this.props.onUserInput(
-                        this.refs.filterTextInput.getDOMNode().value,
+                        event.target.value,
                         undefined
                     )
                 },
                 render: function(){
                     return (
-                                <input
-                                type="text"
-                                placeholder="Search..."
-                                value={this.props.filterText}
-                                ref="filterTextInput"
-                                onChange={this.handleUserInput}
+                                <TextField
+                                    className="clearfix"
+                                    hintText="Search The World!!"
+                                    value={this.props.filterText}
+                                    ref="filterTextInput"
+                                    onChange={this.handleUserInput}
                                 />
                             )
                 }
@@ -300,15 +308,16 @@ var FilterableView = React.createClass({
                     //    this.setState({value:event.target.value});
                     //
                     //},
-                    handleUserInput: function(event){
+                    handleUserInput: function(event,selectedIndex,menuItem){
+                        console.log('308.handleUserInput arguments',arguments);
                         console.log('273.FilterOptions.handleUserInput',event.target.value, this.props.filterName);
-                        this.setState({value:event.target.value});
+                        this.setState({value:parseInt(menuItem.value)});
                         this.props
                             .onUserInput
                                     (
                                         undefined,
                                         {
-                                            value:event.target.value,
+                                            value:parseInt(menuItem.value),
                                             filter:this.props.filterName
                                         }
                                     )
@@ -350,16 +359,20 @@ var FilterableView = React.createClass({
                             //}, this)
                         http://stackoverflow.com/questions/21733847/react-jsx-selecting-selected-on-selected-select-option
                         //http://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down
+                        var menuItems = [];
+                        menuItems = this.props.filterData.map(function(item) {
+                            return (
+                                {payload:item,text:"Less than "+item, value:item}
+                            );
+                        }, this);
+
                         return (
                             <div>
-                                <select onChange={this.handleUserInput} value={this.state.value}>
-                                {this.props.filterData.map(function(item) {
-                                    return (
-                                        <option value={item}> Less than {item}
-                                        </option>
-                                    );
-                                }, this)}
-                                </select>
+                                <DropDownMenu
+                                    menuItems={menuItems}
+                                    onChange={this.handleUserInput}
+                                    value={this.state.value}>
+                                </DropDownMenu>
                             </div>
                         );
                     }
@@ -463,7 +476,13 @@ var FilterableView = React.createClass({
                 //console.log(filter);
 
                 var FilteredResults = searchResult.map(function(city){
-                    return (<li>{city['data-name']}</li>)
+                    return (
+                        <div>
+                            <Paper zDepth={2}>
+                                <p>{city['data-name']}</p>
+                            </Paper>
+                        </div>
+                    )
                 });
                 return (
                     <div className="FilteredResult">
