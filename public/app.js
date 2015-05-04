@@ -75,7 +75,7 @@ var FilterableView = React.createClass({
     getInitialState: function getInitialState() {
         return {
             //straight text debounce search
-            filterText: '',
+            filterText: undefined,
             //TODO: Include more search options from cityData.json
             //{filter:optionSelected}
             selectedOptions: [] //TODO: Include option for added multiple Options, only one value right now
@@ -93,7 +93,7 @@ var FilterableView = React.createClass({
         var wasReplaced = false;
         //TODO: Bug where when you change the search, you erase the selectedOptions
         if (selectedOption) {
-            var updatedSelectedOptions = this.state.selectedOptions;
+            var updatedSelectedOptions = this.state.selectedOptions || [];
             updatedSelectedOptions.forEach(function (options, index) {
                 if (options.filter === selectedOption.filter) {
                     options.value = selectedOption.value;
@@ -121,10 +121,12 @@ var FilterableView = React.createClass({
             //this.setState({
             //	filterText: filterText,
             //});
+            console.log('1', filterText);
             this.setState({
                 filterText: filterText //,
                 //selectedOptions: updatedSelectedOptions
             });
+            console.log('123.handleUserInput.setState', this.state);
         } else if (!filterText && selectedOption) {
             //this.setState({
             //	selectedOptions: this.state.selectedOptions.push(selectedOption)
@@ -133,18 +135,21 @@ var FilterableView = React.createClass({
                 //filterText: filterText,
                 selectedOptions: updatedSelectedOptions
             });
+            console.log('123.handleUserInput.setState', this.state);
         } else {
             //this.setState({
             //	filterText: filterText,
             //	selectedOptions: this.state.selectedOptions.push(selectedOption)
             //});
+            console.log('3', filterText);
             this.setState({
-                filterText: filterText,
+                filterText: undefined,
                 selectedOptions: updatedSelectedOptions
             });
+            console.log('123.handleUserInput.setState', this.state);
         }
 
-        console.log('123.handleUserInput.setState', this.state);
+        //console.log('123.handleUserInput.setState',this.state);
     },
     render: function render() {
         //console.log('95-FilterableView Render',this.state);
@@ -152,16 +157,32 @@ var FilterableView = React.createClass({
         //console.log('82 - rendering FilterableView',this.state);
         return React.createElement(
             'div',
-            null,
-            React.createElement(FilterMenu, {
-                filterText: this.state.filterText,
-                selectedOptions: this.state.selectedOptions,
-                onUserInput: this.handleUserInput
-            }),
-            React.createElement(SelectedView, {
-                filterText: this.state.filterText,
-                selectedOptions: this.state.selectedOptions
-            })
+            { className: 'grid module' },
+            React.createElement(
+                'div',
+                { className: 'col-2-3' },
+                React.createElement(
+                    'div',
+                    { className: 'module' },
+                    React.createElement(SelectedView, {
+                        filterText: this.state.filterText,
+                        selectedOptions: this.state.selectedOptions
+                    })
+                )
+            ),
+            React.createElement(
+                'div',
+                { className: 'col-1-3' },
+                React.createElement(
+                    'div',
+                    { className: 'module' },
+                    React.createElement(FilterMenu, {
+                        filterText: this.state.filterText,
+                        selectedOptions: this.state.selectedOptions,
+                        onUserInput: this.handleUserInput
+                    })
+                )
+            )
         );
     }
 });
@@ -170,6 +191,7 @@ var FilterMenu = React.createClass({
     displayName: 'FilterMenu',
 
     handleUserInput: function handleUserInput(filterText, selectedOption) {
+        console.log('166.handleUserInput', filterText, selectedOption);
         this.props.onUserInput(filterText, selectedOption);
     },
     render: function render() {
@@ -246,7 +268,7 @@ var FilterInput = React.createClass({
     displayName: 'FilterInput',
 
     handleUserInput: function handleUserInput(event) {
-        console.dir(event.target.value);
+        console.log('235.handleUserInput', event.target.value);
         this.props.onUserInput(event.target.value, undefined);
     },
     render: function render() {
@@ -478,16 +500,22 @@ var FilteredResults = React.createClass({
         //console.log(filter);
 
         var FilteredResults = searchResult.map(function (city) {
+            var imageSource = 'images/' + city['data-slug'] + '.jpg';
             return React.createElement(
                 'div',
-                null,
+                { className: 'city' },
                 React.createElement(
-                    Paper,
-                    { zDepth: 2 },
+                    'div',
+                    null,
                     React.createElement(
-                        'p',
-                        null,
-                        city['data-name']
+                        Paper,
+                        { zDepth: 2 },
+                        React.createElement(
+                            'p',
+                            { className: 'CityName' },
+                            city['data-name']
+                        ),
+                        React.createElement('img', { src: imageSource })
                     )
                 )
             );
@@ -511,7 +539,7 @@ var App = React.createClass({
         //<NavBar/> TODO: Temp removed
         return React.createElement(
             'div',
-            { className: 'App' },
+            null,
             React.createElement(FilterableView, null)
         );
     }
