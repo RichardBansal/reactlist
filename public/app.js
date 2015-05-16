@@ -25,7 +25,7 @@ var ajaxServerRequest = function ajaxServerRequest() {
         url: url,
         dataType: 'json',
         success: function success(data) {
-            data.length = 10;
+            //data.length = 10;
             var dataObj = {
                 cityData: data,
                 filters: Object.keys(data[0])
