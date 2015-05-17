@@ -35,7 +35,7 @@ We have used many open source technologies for completion of this project as fol
   * Facebook's React
   * JQuery
   * Browserify
-  * Material CSS
+  * Material Design
 * Backend Server (To serve up the data, a local host backend server was created)
   * Node
   * Express
