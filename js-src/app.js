@@ -10,6 +10,7 @@ var Paper = mui.Paper;
 var LeftNav = mui.LeftNav;
 var DropDownMenu = mui.DropDownMenu;
 var {Container,Block} = require('react-flexgrid');
+//var SelectedView = require('./selectedview.js')
 
 var ajaxServerRequest = function(){
 	var url = "http://localhost:5000/";
@@ -541,5 +542,3 @@ var App = React.createClass({
 });
 
 React.render(<App/>,document.getElementById('content'));
-
-//NEXT: Actually using multiple filters

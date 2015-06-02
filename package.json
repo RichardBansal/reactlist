@@ -28,5 +28,8 @@
     "babel-runtime": "^5.2.9",
     "react-flexgrid": "^0.5.0",
     "react-grid-layout": "^0.8.3"
+  },
+  "devDependencies": {
+    "gulp-plumber": "^1.0.1"
   }
 }

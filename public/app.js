@@ -18,6 +18,8 @@ var _require = require('react-flexgrid');
 var Container = _require.Container;
 var Block = _require.Block;
 
+//var SelectedView = require('./selectedview.js')
+
 var ajaxServerRequest = function ajaxServerRequest() {
     var url = 'http://localhost:5000/';
     console.log('request data', url);
@@ -560,8 +562,6 @@ var App = React.createClass({
 });
 
 React.render(React.createElement(App, null), document.getElementById('content'));
-
-//NEXT: Actually using multiple filters
 //event.target.value);
 //console.log(this.refs.) /
 //console.log('in FilterOptions handlerUserInput',typeof i);
