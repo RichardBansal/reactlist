@@ -27,7 +27,15 @@
     "gulp-less": "^3.0.3",
     "babel-runtime": "^5.2.9",
     "react-flexgrid": "^0.5.0",
-    "react-grid-layout": "^0.8.3"
+    "react-grid-layout": "^0.8.3",
+    "gulp-util": "^3.0.5",
+    "gulp-filter": "^2.0.2",
+    "gulp-autoprefixer": "^2.3.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-sass": "^2.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-jshint": "^1.11.0",
+    "jshint-stylish": "^2.0.0"
   },
   "devDependencies": {
     "gulp-plumber": "^1.0.1"
