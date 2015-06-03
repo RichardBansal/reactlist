@@ -26,9 +26,7 @@ var FilterableView = React.createClass({
     getInitialState(){
         return {
             filterText: '',
-            //TODO: Include more search options from cityData.json
-            selectedOptions: [] //TODO: Include option for added multiple Options, only one value right now
-            //TODO: Should selectedOptions be an object, for easy replace?
+            selectedOptions: []
         };
     },
     handleUserInput(filterText, selectedOption){
@@ -49,8 +47,6 @@ var FilterableView = React.createClass({
                 updatedSelectedOptions.push(selectedOption);
             }
         }
-        //TODO: Last character is not being recorded in state
-
         console.log('115 - before state change, current state', this.state);
         filterText = filterText || '';
         this.setState({
@@ -95,18 +91,4 @@ var App = React.createClass({
 });
 
 React.render(<App/>,document.getElementById('content'));
-
-
-//NavBar
-//FilterableViews (Parent for SelectedView and FilterMenu)
-    //FilterViews
-    //FilterMenu
-        //FilterItems
-            //FilterInput
-            //Filter Dropdown
-                //Filter Options
-    //SelectedView
-        //Filtered Results
-        //Others
-
 

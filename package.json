@@ -40,7 +40,8 @@
     "run-sequence": "^1.1.0",
     "jsxhint": "^0.15.1",
     "gulp-react": "^3.0.1",
-    "gulp-babel": "^5.1.0"
+    "gulp-babel": "^5.1.0",
+    "flux": "^2.0.3"
   },
   "devDependencies": {
     "gulp-plumber": "^1.0.1"

@@ -1,6 +1,93 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
 
-},{}],2:[function(require,module,exports){
+var React = require('react');
+var ajaxServerRequest = require('./../../stores/app-stores.js').ajaxServerRequest;
+var mui = require('material-ui');
+var RaisedButton = mui.RaisedButton;
+var TextField = mui.TextField;
+var LeftNav = mui.LeftNav;
+var DropDownMenu = mui.DropDownMenu;
+var Paper = mui.Paper;
+var ajaxServerRequest = require('./../../stores/app-stores.js').ajaxServerRequest;
+var Links = ['Cities', 'Forum', 'Chat', 'Guides', 'Remote Jobs', 'Meetups', 'Stories', 'Signup'];
+var DataFilters = [{ filterName: 'data-long-term-cost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }, { filterName: 'data-apartment-cost', filterData: ['125', '250', '500', '1000', '2000'] }, { filterName: 'data-hotel-price', filterData: ['3', '5', '10', '25', '50'] }, { filterName: 'data-nomadcost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }];
+
+var FilterDropDown = React.createClass({
+    displayName: 'FilterDropDown',
+
+    //getInitialState: function(){
+    //    //TODO: YOU WERE WORKING HERE
+    //},
+    handleUserInput: function handleUserInput(undefined, selectedOption) {
+        console.log('205.FilterDropDown.handleUserInput', selectedOption);
+        //are you getting the filter and the filter option
+        //wrap the option and the correct filter
+        //console.log('205',this.refs.filterDropDown.getDOMNode().value);
+        this.props.onUserInput(undefined, selectedOption);
+    },
+    render: function render() {
+        //TODO: For each filter you need to send the appropriate data down
+        var FilterArr = DataFilters.map((function (filter) {
+            return React.createElement(
+                'div',
+                null,
+                filter.filterName,
+                React.createElement(FilterOptions, {
+                    selectedOptions: this.props.selectedOptions,
+                    onUserInput: this.handleUserInput,
+                    filterName: filter.filterName,
+                    filterData: filter.filterData
+                })
+            );
+        }).bind(this));
+
+        return React.createElement(
+            'div',
+            null,
+            FilterArr
+        );
+    }
+});
+var FilterOptions = React.createClass({
+    displayName: 'FilterOptions',
+
+    getInitialState: function getInitialState() {
+        return {
+            value: undefined
+        };
+    },
+
+    handleUserInput: function handleUserInput(event, selectedIndex, menuItem) {
+        console.log('308.handleUserInput arguments', arguments);
+        console.log('273.FilterOptions.handleUserInput', event.target.value, this.props.filterName);
+        this.setState({ value: parseInt(menuItem.value) });
+        this.props.onUserInput(undefined, {
+            value: parseInt(menuItem.value),
+            filter: this.props.filterName
+        });
+    },
+    render: function render() {
+        var menuItems = [];
+        menuItems = this.props.filterData.map(function (item) {
+            return { payload: item, text: 'Less than ' + item, value: item };
+        }, this);
+
+        return React.createElement(
+            'div',
+            null,
+            React.createElement(DropDownMenu, {
+                menuItems: menuItems,
+                onChange: this.handleUserInput,
+                value: this.state.value })
+        );
+    }
+});
+
+module.exports = FilterDropDown;
+
+
+},{"./../../stores/app-stores.js":7,"material-ui":18,"react":263}],2:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -127,7 +214,7 @@ var FilterViews = React.createClass({
         //<li>List View</li>
         //<li>Map View</li>
         //<li>Settings View</li>
-        //</ul>
+        //</ul>//
         return React.createElement('div', { className: 'FilterViews' });
     }
 });
@@ -140,15 +227,17 @@ var FilterMenu = React.createClass({
         this.props.onUserInput(filterText, selectedOption);
     },
     render: function render() {
-        return React.createElement(
-            'div',
-            { className: 'FilterMenu' },
-            React.createElement(FilterViews, null),
-            React.createElement(FilterItems, {
-                filterText: this.props.filterText,
-                selectedOptions: this.props.selectedOptions,
-                onUserInput: this.handleUserInput
-            })
+        return (
+            //TODO: <FilterViews/>
+            React.createElement(
+                'div',
+                { className: 'FilterMenu' },
+                React.createElement(FilterItems, {
+                    filterText: this.props.filterText,
+                    selectedOptions: this.props.selectedOptions,
+                    onUserInput: this.handleUserInput
+                })
+            )
         );
     }
 });
@@ -37739,9 +37828,7 @@ var FilterableView = React.createClass({
     getInitialState: function getInitialState() {
         return {
             filterText: '',
-            //TODO: Include more search options from cityData.json
-            selectedOptions: [] //TODO: Include option for added multiple Options, only one value right now
-            //TODO: Should selectedOptions be an object, for easy replace?
+            selectedOptions: []
         };
     },
     handleUserInput: function handleUserInput(filterText, selectedOption) {
@@ -37762,8 +37849,6 @@ var FilterableView = React.createClass({
                 updatedSelectedOptions.push(selectedOption);
             }
         }
-        //TODO: Last character is not being recorded in state
-
         console.log('115 - before state change, current state', this.state);
         filterText = filterText || '';
         this.setState({
@@ -37818,18 +37903,6 @@ var App = React.createClass({
 });
 
 React.render(React.createElement(App, null), document.getElementById('content'));
-
-//NavBar
-//FilterableViews (Parent for SelectedView and FilterMenu)
-//FilterViews
-//FilterMenu
-//FilterItems
-//FilterInput
-//Filter Dropdown
-//Filter Options
-//SelectedView
-//Filtered Results
-//Others
 
 
 },{"./components/filter/filtermenu.js":4,"./components/view/selectedview.js":6,"jquery":17,"material-ui":18,"react":263,"react-flexgrid":90}]},{},[264]);
