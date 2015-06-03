@@ -30,7 +30,7 @@ var FilterDropDown = React.createClass({
         var _this = this;
 
         //TODO: For each filter you need to send the appropriate data down
-        var FilterArr = DataFilters.map((function (filter) {
+        var FilterArr = DataFilters.map(function (filter) {
             return React.createElement(
                 'div',
                 null,
@@ -42,7 +42,7 @@ var FilterDropDown = React.createClass({
                     filterData: filter.filterData
                 })
             );
-        }).bind(this));
+        }).bind(this);
 
         return React.createElement(
             'div',
@@ -57,7 +57,6 @@ var FilterOptions = React.createClass({
     getInitialState: function getInitialState() {
         return {
             value: undefined
-
         };
     },
 
@@ -281,6 +280,10 @@ var FilteredResults = React.createClass({
     render: function render() {
         //console.log('render',this.props.filterText);
         var self = this;
+        var filter;
+        var tempArr;
+        var result;
+        var searchResult = [];
 
         //NOTE: This is only a direct lookup of the file name
         //TODO: You need to improve the searching for more data points
@@ -291,54 +294,34 @@ var FilteredResults = React.createClass({
         //TODO: You need an option to add more filters to show, so
         //only show a subset list to begin with
         //TODO: Search only works for one item, at a time, so either cost or search Needs to be more robust
-        var searchResult = [];
-        var searchResult = this.state.citydata.filter(function (city) {
+
+        searchResult = this.state.citydata.filter(function (city) {
             //console.log('381',city);
             //TODO: Clean-up, initial state does not have filter properties set.
             //if()
             //TODO: Only allowed search or filter, not both yet
             if (self.props.selectedOptions && self.props.filterText) {
-                var filter = self.props.selectedOptions[filter];
-                var tempArr = Array.prototype.slice.call(self.props.selectedOptions);
-                var result = tempArr.every(function (filterObj) {
+                filter = self.props.selectedOptions[filter];
+                tempArr = Array.prototype.slice.call(self.props.selectedOptions);
+                result = tempArr.every(function (filterObj) {
                     return parseInt(city[filterObj.filter]) < filterObj.value;
                 });
                 result = result && city['data-name'].indexOf(self.props.filterText) !== -1;
                 return result;
             } else if (self.props.selectedOptions) {
-                var filter = self.props.selectedOptions[filter];
-                //console.log('386',filter);
-                //console.log(
-                //    '386.render.FilteredResutls',
-                //    //    //city['data-apartment-cost'] < 500,
-                //    //    //self.props.selectedOptions
-                //    city[filter],
-                //    self.props.selectedOptions.value
-                //);
-                //{value:"500",filter:"nomadCost"}
-                var tempArr = Array.prototype.slice.call(self.props.selectedOptions);
-                var result = tempArr.every(function (filterObj) {
+                filter = self.props.selectedOptions[filter];
+                tempArr = Array.prototype.slice.call(self.props.selectedOptions);
+                result = tempArr.every(function (filterObj) {
                     return parseInt(city[filterObj.filter]) < filterObj.value;
                 });
                 //console.log(result);
                 //TODO: Assumed this is working, to test!
                 //TODO: Set initial values for options, its empty, not i.e. 'LESS than 500' on load
-                return (
-                    //parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-                    result
-                );
+                return result;
             } else {
                 return city['data-name'].indexOf(self.props.filterText) !== -1;
             }
-            //return (
-            //        city['data-name'] === self.props.filterText ||
-            //        parseInt(city[self.props.selectedOptions.filter]) < self.props.selectedOptions.value
-            //        );
         });
-
-        //console.log('397.searchResult',searchResult);
-
-        //console.log(filter);
 
         var FilteredResults = searchResult.map(function (city) {
             var imageSource = 'images/' + city['data-slug'] + '.jpg';
@@ -37851,12 +37834,12 @@ var FilterableView = React.createClass({
         };
     },
     handleUserInput: function handleUserInput(filterText, selectedOption) {
+        var updatedSelectedOptions = this.state.selectedOptions || [];
         console.log('FilterableView - handleUserInput', filterText, selectedOption);
         //TODO: You need to manage options changed for the same filter
         var wasReplaced = false;
         //TODO: Bug where when you change the search, you erase the selectedOptions
         if (selectedOption) {
-            var updatedSelectedOptions = this.state.selectedOptions || [];
             updatedSelectedOptions.forEach(function (options, index) {
                 if (options.filter === selectedOption.filter) {
                     options.value = selectedOption.value;
@@ -37889,8 +37872,7 @@ var FilterableView = React.createClass({
                     { className: 'module' },
                     React.createElement(SelectedView, {
                         filterText: this.state.filterText,
-                        selectedOptions: this.state.selectedOptions
-                    })
+                        selectedOptions: this.state.selectedOptions })
                 )
             ),
             React.createElement(

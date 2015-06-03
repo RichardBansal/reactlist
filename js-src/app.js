@@ -23,7 +23,7 @@ var DataFilters = [
 ];
 
 var FilterableView = React.createClass({
-    getInitialState: () => {
+    getInitialState(){
         return {
             filterText: '',
             //TODO: Include more search options from cityData.json
@@ -31,13 +31,13 @@ var FilterableView = React.createClass({
             //TODO: Should selectedOptions be an object, for easy replace?
         };
     },
-    handleUserInput: function(filterText, selectedOption){
+    handleUserInput(filterText, selectedOption){
+        var updatedSelectedOptions = this.state.selectedOptions || [];
         console.log('FilterableView - handleUserInput',filterText, selectedOption);
         //TODO: You need to manage options changed for the same filter
         var wasReplaced = false;
         //TODO: Bug where when you change the search, you erase the selectedOptions
         if(selectedOption){
-            var updatedSelectedOptions = this.state.selectedOptions || [];
             updatedSelectedOptions.forEach(function(options,index){
                 if(options.filter === selectedOption.filter){
                     options.value = selectedOption.value;
@@ -58,15 +58,14 @@ var FilterableView = React.createClass({
             selectedOptions: updatedSelectedOptions || this.state.selectedOptions
         });
     },
-    render: function(){
+    render(){
         return (
             <div className="grid module">
                 <div className="col-2-3">
                     <div className="module">
                         <SelectedView
                             filterText={this.state.filterText}
-                            selectedOptions={this.state.selectedOptions}
-                            />
+                            selectedOptions={this.state.selectedOptions}/>
                     </div>
                 </div>
                 <div className="col-1-3">
@@ -79,19 +78,19 @@ var FilterableView = React.createClass({
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 });
 
 var App = React.createClass({
-	render: function(){
+	render(){
 		// console.log(filters);
 		//<NavBar/> TODO: Temp removed
 		return (
 				<div>
 					<FilterableView/>
 				</div>
-			)
+			);
 	}
 });
 
