@@ -32,10 +32,11 @@ Pre-compiled JSX.
 
 We have used many open source technologies for completion of this project as follows:
 * Frontend Application
-  * Facebook's React
+  * Facebook's React + Flux
   * JQuery
   * Browserify
   * Material Design
+  * ES6
 * Backend Server (To serve up the data, a local host backend server was created)
   * Node
   * Express
