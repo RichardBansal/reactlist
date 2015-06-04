@@ -7,7 +7,7 @@ var $ = require('jquery');
 
 var ajaxServerRequest = function ajaxServerRequest() {
     var url = 'http://localhost:5000/';
-    console.log('request data', url);
+    //console.log('request data',url);
     return $.ajax({
         url: url,
         dataType: 'json',
@@ -23,7 +23,7 @@ var ajaxServerRequest = function ajaxServerRequest() {
 var CityActions = {
     retrieveCityData: function retrieveCityData() {
         ajaxServerRequest().then(function (citydata) {
-            console.log('SearchActions', citydata);
+            //console.log('SearchActions',citydata);
             Dispatcher.dispatch({
                 name: 'CITY_DATA_LOADED',
                 citydata: citydata,
@@ -63,7 +63,7 @@ var LeftNav = mui.LeftNav;
 var DropDownMenu = mui.DropDownMenu;
 var Paper = mui.Paper;
 var Links = ['Cities', 'Forum', 'Chat', 'Guides', 'Remote Jobs', 'Meetups', 'Stories', 'Signup'];
-var DataFilters = [{ filterName: 'data-long-term-cost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }, { filterName: 'data-apartment-cost', filterData: ['125', '250', '500', '1000', '2000'] }, { filterName: 'data-hotel-price', filterData: ['3', '5', '10', '25', '50'] }, { filterName: 'data-nomadcost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }];
+var CityStore = require('../../stores');
 var CityActions = require('./../../actions');
 
 var FilterDropDown = React.createClass({
@@ -74,21 +74,28 @@ var FilterDropDown = React.createClass({
     //},
     handleUserInput: function handleUserInput(undefined, selectedOption) {
         console.log('205.FilterDropDown.handleUserInput', selectedOption);
-        //are you getting the filter and the filter option
-        //wrap the option and the correct filter
-        //console.log('205',this.refs.filterDropDown.getDOMNode().value);
-        this.props.onUserInput(undefined, selectedOption);
         CityActions.dropDownUpdated(selectedOption.filter, selectedOption.value);
+    },
+    getInitialState: function getInitialState() {
+        return {
+            selectedOptions: []
+        };
+    },
+    componentDidMount: function componentDidMount() {
+        var self = this;
+        CityStore.on('change', function () {
+            self.setState({ selectedOptions: CityStore.getSelectedOptions() });
+        });
     },
     render: function render() {
         //TODO: For each filter you need to send the appropriate data down
-        var FilterArr = DataFilters.map((function (filter) {
+        var FilterArr = CityStore.getDataFilters().map((function (filter) {
             return React.createElement(
                 'div',
                 null,
                 filter.filterName,
                 React.createElement(FilterOptions, {
-                    selectedOptions: this.props.selectedOptions,
+                    selectedOptions: this.state.selectedOptions,
                     onUserInput: this.handleUserInput,
                     filterName: filter.filterName,
                     filterData: filter.filterData
@@ -141,11 +148,10 @@ var FilterOptions = React.createClass({
 module.exports = FilterDropDown;
 
 
-},{"./../../actions":1,"./../../stores/app-stores.js":9,"material-ui":26,"react":271}],3:[function(require,module,exports){
+},{"../../stores":10,"./../../actions":1,"./../../stores/app-stores.js":9,"material-ui":26,"react":271}],3:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
-var ajaxServerRequest = require('./../../stores/app-stores.js').ajaxServerRequest;
 var mui = require('material-ui');
 var RaisedButton = mui.RaisedButton;
 var TextField = mui.TextField;
@@ -154,21 +160,30 @@ var DropDownMenu = mui.DropDownMenu;
 var Paper = mui.Paper;
 var Links = ['Cities', 'Forum', 'Chat', 'Guides', 'Remote Jobs', 'Meetups', 'Stories', 'Signup'];
 var CityActions = require('./../../actions');
-var DataFilters = [{ filterName: 'data-long-term-cost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }, { filterName: 'data-apartment-cost', filterData: ['125', '250', '500', '1000', '2000'] }, { filterName: 'data-hotel-price', filterData: ['3', '5', '10', '25', '50'] }, { filterName: 'data-nomadcost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }];
+var CityStore = require('../../stores');
 
 var FilterInput = React.createClass({
     displayName: 'FilterInput',
 
     handleUserInput: function handleUserInput(event) {
-        console.log('235.handleUserInput', event.target.value);
-        this.props.onUserInput(event.target.value, undefined);
         CityActions.searchFieldUpdated(event.target.value);
+    },
+    getInitialState: function getInitialState() {
+        return {
+            filterText: ''
+        };
+    },
+    componentDidMount: function componentDidMount() {
+        var self = this;
+        CityStore.on('change', function () {
+            self.setState({ filterText: CityStore.getFilterText() });
+        });
     },
     render: function render() {
         return React.createElement(TextField, {
             className: 'clearfix',
             hintText: 'Search The World!!',
-            value: this.props.filterText,
+            value: this.state.filterText,
             ref: 'filterTextInput',
             onChange: this.handleUserInput
         });
@@ -178,18 +193,16 @@ var FilterInput = React.createClass({
 module.exports = FilterInput;
 
 
-},{"./../../actions":1,"./../../stores/app-stores.js":9,"material-ui":26,"react":271}],4:[function(require,module,exports){
+},{"../../stores":10,"./../../actions":1,"material-ui":26,"react":271}],4:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
-var ajaxServerRequest = require('./../../stores/app-stores.js').ajaxServerRequest;
 var mui = require('material-ui');
 var RaisedButton = mui.RaisedButton;
 var TextField = mui.TextField;
 var LeftNav = mui.LeftNav;
 var DropDownMenu = mui.DropDownMenu;
 var Paper = mui.Paper;
-var ajaxServerRequest = require('./../../stores/app-stores.js').ajaxServerRequest;
 var Links = ['Cities', 'Forum', 'Chat', 'Guides', 'Remote Jobs', 'Meetups', 'Stories', 'Signup'];
 var FilterDropDown = require('./filterdropdown');
 var FilterInput = require('./filterinput');
@@ -248,11 +261,10 @@ var FilterItems = React.createClass({
 module.exports = FilterItems;
 
 
-},{"../../actions":1,"../../stores":10,"./../../stores/app-stores.js":9,"./filterdropdown":2,"./filterinput":3,"material-ui":26,"react":271}],5:[function(require,module,exports){
+},{"../../actions":1,"../../stores":10,"./filterdropdown":2,"./filterinput":3,"material-ui":26,"react":271}],5:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
-var ajaxServerRequest = require('./../../stores/app-stores.js').ajaxServerRequest;
 var mui = require('material-ui');
 var RaisedButton = mui.RaisedButton;
 var TextField = mui.TextField;
@@ -262,8 +274,6 @@ var Paper = mui.Paper;
 var ajaxServerRequest = require('./../../stores/app-stores.js').ajaxServerRequest;
 var Links = ['Cities', 'Forum', 'Chat', 'Guides', 'Remote Jobs', 'Meetups', 'Stories', 'Signup'];
 var FilterItems = require('./filteritems');
-
-var DataFilters = [{ filterName: 'data-long-term-cost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }, { filterName: 'data-apartment-cost', filterData: ['125', '250', '500', '1000', '2000'] }, { filterName: 'data-hotel-price', filterData: ['3', '5', '10', '25', '50'] }, { filterName: 'data-nomadcost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }];
 
 var FilterViews = React.createClass({
     displayName: 'FilterViews',
@@ -333,7 +343,7 @@ var FilteredResults = React.createClass({
         //self.loadAllCitiesFromServer();
         CityActions.retrieveCityData();
         CityStore.on('change', function () {
-            console.log('componentDidMount()/stateChange', CityStore.getFilteredCityData());
+            //console.log('componentDidMount()/stateChange',CityStore.getFilteredCityData());
             self.setState({ citydata: CityStore.getFilteredCityData() || CityStore.getCityData() });
         });
     },
@@ -459,6 +469,7 @@ var filterText;
 var selectedOptions;
 var filters;
 var filteredCityData; //based off of search results
+var DataFilters = [{ filterName: 'data-long-term-cost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }, { filterName: 'data-apartment-cost', filterData: ['125', '250', '500', '1000', '2000'] }, { filterName: 'data-hotel-price', filterData: ['3', '5', '10', '25', '50'] }, { filterName: 'data-nomadcost', filterData: ['500', '1000', '1500', '2000', '3000', '5000'] }];
 
 CityStore.getCityData = function () {
     return citydata;
@@ -475,6 +486,9 @@ CityStore.getFilters = function () {
 CityStore.getFilteredCityData = function () {
     return filteredCityData;
 };
+CityStore.getDataFilters = function () {
+    return DataFilters;
+};
 
 function _updateSelectedOptions(filter, value) {
     //if filter exists update it, otherwise add it
@@ -482,18 +496,18 @@ function _updateSelectedOptions(filter, value) {
     var i = _.findIndex(selectedOptions, function (item) {
         return item.filter === filter;
     });
-    console.log(i);
+    //console.log(i);
     if (i !== -1) {
         selectedOptions[i].value = value;
     } else {
-        console.log('in here2');
+        //console.log('in here2');
         if (!selectedOptions) selectedOptions = [];
         selectedOptions.push({
             filter: filter,
             value: value
         });
     }
-    console.log('in here', selectedOptions);
+    //console.log('in here',selectedOptions);
 }
 
 function _updateFilterCityData() {
@@ -516,13 +530,15 @@ function _updateFilterCityData() {
             return city['data-name'].indexOf(filterText) !== -1;
         }
     });
+    //console.log(filteredCityData);
+    console.log('_updateFilterCityData', filterText, selectedOptions);
 }
 
 CityStore.dispatcherIndex = Dispatcher.register(function (action) {
     //console.log('CityStore.dispatcherIndex action',action);
     switch (action.name) {
         case 'CITY_DATA_LOADED':
-            console.log('CityStore.dispatcherIndex CITY_DATA_LOADED', action.citydata);
+            //console.log('CityStore.dispatcherIndex CITY_DATA_LOADED',action.citydata);
             citydata = action.citydata;
             filters = action.filters;
             CityStore.emit('change');
