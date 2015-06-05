@@ -32,13 +32,25 @@ Pre-compiled JSX.
 
 We have used many open source technologies for completion of this project as follows:
 * Frontend Application
-  * Facebook's React + Flux
+  * Facebook's React
+  * Facebook's Flux Architecture (implemented from scratch)
   * JQuery
   * Browserify
   * Material Design
-  * ES6
+  * ES6 (transpiled via Babelify)
 * Backend Server (To serve up the data, a local host backend server was created)
   * Node
   * Express
 * Other
   * Cheerio (to get initial data set)
+  
+## Future works
+ * Implement front end testing
+ * Deploy to Heroku
+ * Auto-generate filter options based on dataset
+ * Update dataset
+ * Implement backend persistency
+ * Additional Components/Featuers
+  * Navigation Bar
+  * React Router
+  * Filter Views
