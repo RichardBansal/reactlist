@@ -4,7 +4,7 @@ var _ = require('lodash'),
     CityStore = new EventEmitter(),
     citydata,
     filterText,
-    selectedOptions,
+    selectedOptions = {},
     filters,
     filteredCityData, //based off of search results
     DataFilters,
@@ -29,29 +29,34 @@ CityStore.getFilteredCityData = () => filteredCityData;
 CityStore.getDataFilters = () => DataFilters;
 
 var _updateSelectedOptions = (filter,value) => {
-    var i = _.findIndex(selectedOptions,(item)=>{
-        return item.filter === filter;
-    });
-    if(i!==-1){
-        selectedOptions[i].value = value;
-    } else {
-        if(!selectedOptions) selectedOptions = [];
-        selectedOptions.push({
-            filter,
-            value
-        });
-    }
+    //var i = _.findIndex(selectedOptions,(item)=>{
+    //    return item.filter === filter;
+    //});
+
+    selectedOptions[filter] = value;
+
+    //if(i!==-1){
+    //    selectedOptions[i].value = value;
+    //} else {
+    //    if(!selectedOptions) selectedOptions = [];
+    //    selectedOptions.push({
+    //        filter,
+    //        value
+    //    });
+    //}
 };
 
+
+//TODO: get this part working again
 var _updateFilterCityData = () => {
-    var tempArr, result;
+    var result;
     filteredCityData = citydata.filter((city)=>{
-        result = city;
+        result = true;
 
         if(selectedOptions){
-            tempArr = Array.prototype.slice.call(selectedOptions); //could be removed
-            result = tempArr.every((filterObj)=>{
-                return (parseInt(city[filterObj.filter]) < filterObj.value);
+            result = _.every(selectedOptions, (value,filter) => {
+                //console.log('arguments', filter, value, city, parseInt(city[filter]));
+                return parseInt(city[filter]) < value;
             });
         }
 

@@ -309,7 +309,8 @@ var React = require('react'),
     DropDownMenu = mui.DropDownMenu,
     Paper = mui.Paper,
     CityStore = require('../../stores'),
-    CityActions = require('./../../actions');
+    CityActions = require('./../../actions'),
+    _ = require('lodash');
 
 module.exports = React.createClass({
     displayName: 'exports',
@@ -326,7 +327,7 @@ module.exports = React.createClass({
         });
     },
     render: function render() {
-        var FilteredResults = this.state.citydata.map(function (city) {
+        var FilteredResults = _.map(this.state.citydata, function (city) {
             var imageSource = 'images/' + city['data-slug'] + '.jpg';
             return React.createElement(
                 'div',
@@ -356,7 +357,7 @@ module.exports = React.createClass({
 });
 
 
-},{"../../stores":9,"./../../actions":1,"material-ui":25,"react":270}],7:[function(require,module,exports){
+},{"../../stores":9,"./../../actions":1,"lodash":24,"material-ui":25,"react":270}],7:[function(require,module,exports){
 'use strict';
 
 var React = require('react'),
@@ -405,7 +406,7 @@ var _ = require('lodash'),
     CityStore = new EventEmitter(),
     citydata,
     filterText,
-    selectedOptions,
+    selectedOptions = {},
     filters,
     filteredCityData,
     //based off of search results
@@ -438,29 +439,33 @@ CityStore.getDataFilters = function () {
 };
 
 var _updateSelectedOptions = function _updateSelectedOptions(filter, value) {
-    var i = _.findIndex(selectedOptions, function (item) {
-        return item.filter === filter;
-    });
-    if (i !== -1) {
-        selectedOptions[i].value = value;
-    } else {
-        if (!selectedOptions) selectedOptions = [];
-        selectedOptions.push({
-            filter: filter,
-            value: value
-        });
-    }
+    //var i = _.findIndex(selectedOptions,(item)=>{
+    //    return item.filter === filter;
+    //});
+
+    selectedOptions[filter] = value;
+
+    //if(i!==-1){
+    //    selectedOptions[i].value = value;
+    //} else {
+    //    if(!selectedOptions) selectedOptions = [];
+    //    selectedOptions.push({
+    //        filter,
+    //        value
+    //    });
+    //}
 };
 
+//TODO: get this part working again
 var _updateFilterCityData = function _updateFilterCityData() {
-    var tempArr, result;
+    var result;
     filteredCityData = citydata.filter(function (city) {
-        result = city;
+        result = true;
 
         if (selectedOptions) {
-            tempArr = Array.prototype.slice.call(selectedOptions); //could be removed
-            result = tempArr.every(function (filterObj) {
-                return parseInt(city[filterObj.filter]) < filterObj.value;
+            result = _.every(selectedOptions, function (value, filter) {
+                //console.log('arguments', filter, value, city, parseInt(city[filter]));
+                return parseInt(city[filter]) < value;
             });
         }
 

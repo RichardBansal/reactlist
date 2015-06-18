@@ -6,7 +6,8 @@ var React = require('react'),
     DropDownMenu = mui.DropDownMenu,
     Paper = mui.Paper,
     CityStore = require('../../stores'),
-    CityActions =  require('./../../actions');
+    CityActions =  require('./../../actions'),
+    _ = require('lodash');
 
 module.exports = React.createClass({
     getInitialState() {
@@ -21,7 +22,7 @@ module.exports = React.createClass({
         });
     },
     render(){
-        var FilteredResults = this.state.citydata.map((city)=>{
+        var FilteredResults = _.map(this.state.citydata,(city)=>{
             var imageSource = 'images/' + city['data-slug'] + '.jpg';
             return (
                 <div className="city">
