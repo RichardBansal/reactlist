@@ -22,7 +22,7 @@ module.exports = React.createClass({
         });
     },
     render(){
-        var FilteredResults = _.map(this.state.citydata,(city)=>{
+        var FilteredResults = _.map(this.state.citydata, (city)=>{
             var imageSource = 'images/' + city['data-slug'] + '.jpg';
             return (
                 <div className="city">

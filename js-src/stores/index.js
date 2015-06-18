@@ -4,7 +4,7 @@ var _ = require('lodash'),
     CityStore = new EventEmitter(),
     citydata,
     filterText,
-    selectedOptions = {},
+    selectedOptions,
     filters,
     filteredCityData, //based off of search results
     DataFilters,
@@ -29,21 +29,8 @@ CityStore.getFilteredCityData = () => filteredCityData;
 CityStore.getDataFilters = () => DataFilters;
 
 var _updateSelectedOptions = (filter,value) => {
-    //var i = _.findIndex(selectedOptions,(item)=>{
-    //    return item.filter === filter;
-    //});
-
+    if(!selectedOptions) selectedOptions = {};
     selectedOptions[filter] = value;
-
-    //if(i!==-1){
-    //    selectedOptions[i].value = value;
-    //} else {
-    //    if(!selectedOptions) selectedOptions = [];
-    //    selectedOptions.push({
-    //        filter,
-    //        value
-    //    });
-    //}
 };
 
 
@@ -54,14 +41,18 @@ var _updateFilterCityData = () => {
         result = true;
 
         if(selectedOptions){
-            result = _.every(selectedOptions, (value,filter) => {
-                //console.log('arguments', filter, value, city, parseInt(city[filter]));
-                return parseInt(city[filter]) < value;
-            });
-        }
+            result = [];
 
-        return result && city['data-name'].indexOf(filterText) !== -1;
+            _.forEach(selectedOptions, function(value,filter){
+               result.push(parseInt(city[filter]) < value);
+            });
+
+            result = _.every(result);
+        }
+        return result && (filterText ? city['data-name'].indexOf(filterText) !== -1 : true);
     });
+
+    console.log(filteredCityData);
 };
 
 CityStore.dispatcherIndex = Dispatcher.register((action)=>{
