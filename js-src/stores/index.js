@@ -19,6 +19,9 @@ DataFilters = [
 Links = ["Cities", "Forum", "Chat", "Guides", "Remote Jobs", "Meetups", "Stories", "Signup"];
 
 CityStore.getCityData = () => citydata;
+//CityStore.getCityData = function(){
+//    return
+//}
 CityStore.getFilterText = () => filterText;
 CityStore.getSelectedOptions = () => selectedOptions;
 CityStore.getFilters = () => filters;
@@ -43,22 +46,17 @@ var _updateSelectedOptions = (filter,value) => {
 var _updateFilterCityData = () => {
     var tempArr, result;
     filteredCityData = citydata.filter((city)=>{
-        if(filterText && selectedOptions){
-            tempArr = Array.prototype.slice.call(selectedOptions);
+        result = city;
+
+        if(selectedOptions){
+            tempArr = Array.prototype.slice.call(selectedOptions); //could be removed
             result = tempArr.every((filterObj)=>{
                 return (parseInt(city[filterObj.filter]) < filterObj.value);
             });
-            return result && city['data-name'].indexOf(filterText) !== -1;
-        } else if(selectedOptions){
-            tempArr = Array.prototype.slice.call(selectedOptions);
-            return tempArr.every((filterObj)=>{
-                return (parseInt(city[filterObj.filter]) < filterObj.value);
-            });
-        } else {
-            return city['data-name'].indexOf(filterText) !==-1;
         }
+
+        return result && city['data-name'].indexOf(filterText) !== -1;
     });
-    //console.log('_updateFilterCityData',filterText, selectedOptions);
 };
 
 CityStore.dispatcherIndex = Dispatcher.register((action)=>{

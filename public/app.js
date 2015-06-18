@@ -418,6 +418,9 @@ Links = ['Cities', 'Forum', 'Chat', 'Guides', 'Remote Jobs', 'Meetups', 'Stories
 CityStore.getCityData = function () {
     return citydata;
 };
+//CityStore.getCityData = function(){
+//    return
+//}
 CityStore.getFilterText = function () {
     return filterText;
 };
@@ -452,22 +455,17 @@ var _updateSelectedOptions = function _updateSelectedOptions(filter, value) {
 var _updateFilterCityData = function _updateFilterCityData() {
     var tempArr, result;
     filteredCityData = citydata.filter(function (city) {
-        if (filterText && selectedOptions) {
-            tempArr = Array.prototype.slice.call(selectedOptions);
+        result = city;
+
+        if (selectedOptions) {
+            tempArr = Array.prototype.slice.call(selectedOptions); //could be removed
             result = tempArr.every(function (filterObj) {
                 return parseInt(city[filterObj.filter]) < filterObj.value;
             });
-            return result && city['data-name'].indexOf(filterText) !== -1;
-        } else if (selectedOptions) {
-            tempArr = Array.prototype.slice.call(selectedOptions);
-            return tempArr.every(function (filterObj) {
-                return parseInt(city[filterObj.filter]) < filterObj.value;
-            });
-        } else {
-            return city['data-name'].indexOf(filterText) !== -1;
         }
+
+        return result && city['data-name'].indexOf(filterText) !== -1;
     });
-    //console.log('_updateFilterCityData',filterText, selectedOptions);
 };
 
 CityStore.dispatcherIndex = Dispatcher.register(function (action) {

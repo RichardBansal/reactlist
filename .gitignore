@@ -3,3 +3,4 @@ bower_components
 gulpfile.js
 workspace.xml
 public/images
+.idea/*
