@@ -439,21 +439,8 @@ CityStore.getDataFilters = function () {
 };
 
 var _updateSelectedOptions = function _updateSelectedOptions(filter, value) {
-    //var i = _.findIndex(selectedOptions,(item)=>{
-    //    return item.filter === filter;
-    //});
     if (!selectedOptions) selectedOptions = {};
     selectedOptions[filter] = value;
-
-    //if(i!==-1){
-    //    selectedOptions[i].value = value;
-    //} else {
-    //    if(!selectedOptions) selectedOptions = [];
-    //    selectedOptions.push({
-    //        filter,
-    //        value
-    //    });
-    //}
 };
 
 //TODO: get this part working again

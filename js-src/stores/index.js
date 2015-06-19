@@ -43,7 +43,7 @@ var _updateFilterCityData = () => {
         if(selectedOptions){
             result = [];
 
-            _.forEach(selectedOptions, function(value,filter){
+            _.forEach(selectedOptions, (value,filter) => {
                result.push(parseInt(city[filter]) < value);
             });
 
