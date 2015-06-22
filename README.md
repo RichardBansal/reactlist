@@ -51,7 +51,7 @@ We have used many open source technologies for completion of this project as fol
  * Auto-generate filter options based on dataset
  * Update dataset
  * Implement backend persistency
- * Additional Components/Featuers
+ * Additional Components/Features
   * Navigation Bar
   * React Router
   * Filter Views
