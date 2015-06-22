@@ -42,6 +42,7 @@ We have used many open source technologies for completion of this project as fol
   * Node
   * Express
 * Other
+  * Gulp build tool
   * Cheerio (to get initial data set)
   
 ## Future works
